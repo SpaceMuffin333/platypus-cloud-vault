@@ -1,12 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>platypus-cloud-vault</title>
+    <title>Platypus Gems Vault</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        @media print {
+            nav, .no-print, .action-buttons { display: none !important; }
+            body { background: white; }
+            #printable-label { box-shadow: none !important; border: 2px solid black !important; margin: 0 auto; width: 3.5in; }
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .logo-hover:hover .logo-bg { fill: #10b981; }
+        .logo-hover:hover .logo-path { stroke: #064e3b; }
+        .sort-header { cursor: pointer; user-select: none; transition: all 0.2s; }
+        .sort-header:hover { color: #10b981; background-color: #f8fafc; }
+    </style>
   </head>
-  <body>
+  <body class="bg-slate-50">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
