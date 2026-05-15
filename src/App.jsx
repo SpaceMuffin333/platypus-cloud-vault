@@ -40,9 +40,7 @@ const IconTrash = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" heigh
 const IconEdit = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
 const IconCamera = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>;
 const IconUpload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>;
-const IconDownload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
 const IconFileText = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
-const IconDatabase = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>;
 const IconLogOut = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>;
 
 const defaultGemState = {
@@ -70,7 +68,6 @@ export default function App() {
     const [newGem, setNewGem] = useState(defaultGemState);
 
     const fileInputRef = useRef(null);
-    const jsonInputRef = useRef(null);
 
     // --- CHECK LOGIN STATUS ON LOAD ---
     useEffect(() => {
@@ -121,7 +118,7 @@ export default function App() {
         setLastUpdated(`${dateStr} ${timeStr}`);
     };
 
-    // --- THE RESTORED PHOTO UPLOAD FUNCTION ---
+    // --- PHOTO UPLOAD ---
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -137,62 +134,10 @@ export default function App() {
         return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0') + "_" + String(now.getHours()).padStart(2, '0') + "-" + String(now.getMinutes()).padStart(2, '0');
     };
 
-    // --- THE RESTORED OFFLINE TOOLS ---
-    const exportHTML = () => {
-        const htmlContent = document.documentElement.outerHTML;
-        const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", `PG_Vault_Backup_${getTimestamp()}.html`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const exportJSON = () => {
-        if (inventory.length === 0) { alert("Nothing to export."); return; }
-        const dataStr = JSON.stringify(inventory);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", `PG_Full_Backup_${getTimestamp()}.json`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const importJSON = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-            try {
-                const parsedData = JSON.parse(event.target.result);
-                if (Array.isArray(parsedData)) {
-                    const { error } = await supabase.from('gems').upsert(parsedData);
-                    if (error) throw error;
-                    setInventory(prev => {
-                        const newInv = [...prev];
-                        parsedData.forEach(importedGem => {
-                            const existingIdx = newInv.findIndex(g => g.id === importedGem.id);
-                            if (existingIdx >= 0) newInv[existingIdx] = { ...newInv[existingIdx], ...importedGem };
-                            else newInv.unshift(importedGem);
-                        });
-                        return newInv;
-                    });
-                    alert(`Successfully restored ${parsedData.length} items to the cloud vault.`);
-                }
-            } catch (err) { alert("Error restoring to cloud: " + err.message); }
-        };
-        reader.readAsText(file);
-        e.target.value = null;
-    };
-
+    // --- OFFLINE EXPORT TOOL (CLEANED) ---
     const exportCSV = () => {
         if (inventory.length === 0) { alert("Nothing to export."); return; }
-        const headers = ['Gem Ref #', 'Vault ID', 'Variety', 'Color', 'Cut', 'Clarity', 'Carats (ct)', 'Length (mm)', 'Width (mm)', 'Depth (mm)', 'Treatment', 'Origin', 'Certificate', 'Vendor', 'Purchase Date', 'Storage Location', 'Cost ($)', 'Market Value ($)', 'Price/ct ($)', 'Private Notes'];
+        const headers = ['Gem Ref #', 'Vault ID', 'Variety', 'Color', 'Cut', 'Clarity', 'Carats (ct)', 'Length (mm)', 'Width (mm)', 'Depth (mm)', 'Treatment', 'Origin', 'Certificate', 'Vendor', 'Purchase Date', 'Storage Location', 'Cost ($)', 'Retail Value ($)', 'Price/ct ($)', 'Private Notes'];
         const csvRows = [headers.join(',')];
         inventory.forEach(gem => {
             const pricePerCt = safeNumber(gem.weight) > 0 ? (safeNumber(gem.price) / safeNumber(gem.weight)).toFixed(2) : 0;
@@ -210,6 +155,7 @@ export default function App() {
         document.body.removeChild(link);
     };
 
+    // --- BULK CSV IMPORT (EXCEL GHOSTBUSTER + PRICE FIX) ---
     const importCSV = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -220,6 +166,7 @@ export default function App() {
             const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
             if (lines.length < 2) return alert("Invalid or empty CSV file.");
 
+            // GHOSTBUSTER: .replace(/^\uFEFF/, '') removes the invisible Excel character!
             const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').replace(/^\uFEFF/, ''));
             const parsedGems = [];
 
@@ -240,25 +187,27 @@ export default function App() {
 
                 headers.forEach((header, index) => {
                     const v = cleanValues[index] || '';
-                    if (header.includes('Gem Ref #') || header.includes('Sheet Ref #')) gem.sheetNum = v;
-                    else if (header.includes('Vault ID')) { gem.id = v; if(v) hasData = true; }
-                    else if (header.includes('Variety')) { gem.type = v; if(v) hasData = true; }
-                    else if (header.includes('Color')) gem.color = v;
-                    else if (header.includes('Cut')) gem.cut = v;
-                    else if (header.includes('Clarity')) gem.clarity = v;
-                    else if (header.includes('Carats') || header.includes('Weight')) gem.weight = v;
-                    else if (header.includes('Length')) gem.dimL = v;
-                    else if (header.includes('Width')) gem.dimW = v;
-                    else if (header.includes('Depth')) gem.dimD = v;
-                    else if (header.includes('Treatment')) gem.treatment = v;
-                    else if (header.includes('Origin')) gem.origin = v;
-                    else if (header.includes('Certificate')) gem.certificate = v;
-                    else if (header.includes('Vendor')) gem.vendor = v;
-                    else if (header.includes('Purchase Date')) gem.purchaseDate = v;
-                    else if (header.includes('Storage Location')) gem.location = v;
-                    else if (header.includes('Cost')) gem.cost = v;
-                    else if (header.includes('Market Value') || header.includes('Price')) gem.price = v;
-                    else if (header.includes('Private Notes')) gem.notes = v;
+                    const h = header.toLowerCase();
+                    
+                    if (h.includes('gem ref') || h.includes('sheet ref')) gem.sheetNum = v;
+                    else if (h.includes('vault id')) { gem.id = v; if(v) hasData = true; }
+                    else if (h.includes('variety')) { gem.type = v; if(v) hasData = true; }
+                    else if (h === 'color') gem.color = v;
+                    else if (h === 'cut') gem.cut = v;
+                    else if (h === 'clarity') gem.clarity = v;
+                    else if (h.includes('carats') || h.includes('weight')) gem.weight = v;
+                    else if (h.includes('length')) gem.dimL = v;
+                    else if (h.includes('width')) gem.dimW = v;
+                    else if (h.includes('depth')) gem.dimD = v;
+                    else if (h.includes('treatment')) gem.treatment = v;
+                    else if (h.includes('origin')) gem.origin = v;
+                    else if (h.includes('certificate')) gem.certificate = v;
+                    else if (h.includes('vendor')) gem.vendor = v;
+                    else if (h.includes('purchase date')) gem.purchaseDate = v;
+                    else if (h.includes('storage location')) gem.location = v;
+                    else if (h.includes('cost')) gem.cost = v;
+                    else if (h.includes('market value') || h.includes('retail value')) gem.price = v;
+                    else if (h.includes('private notes')) gem.notes = v;
                 });
 
                 if (hasData && gem.type) {
@@ -282,7 +231,7 @@ export default function App() {
                     });
                     return newInv;
                 });
-                alert(`Successfully imported ${parsedGems.length} items. Prices and Gem Numbers are restored!`);
+                alert(`Successfully imported ${parsedGems.length} items. Retail Values are accurately loaded!`);
             }
         };
         reader.readAsText(file);
@@ -372,7 +321,7 @@ export default function App() {
         );
     }
 
-    // --- RESTORED LABEL VIEW ---
+    // --- LABEL PRINTER VIEW ---
     const renderLabel = () => {
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${selectedGem.id}`;
         return (
@@ -428,28 +377,18 @@ export default function App() {
                 </div>
                 <div className="flex flex-wrap gap-3 items-center justify-end mt-4 md:mt-0">
                     <input type="file" accept=".csv" ref={fileInputRef} onChange={importCSV} className="hidden" />
-                    <input type="file" accept=".json" ref={jsonInputRef} onChange={importJSON} className="hidden" />
                     
-                    {/* RESTORED ALL BUTTONS INCLUDING EXPORT CSV */}
-                    <button onClick={() => jsonInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg hover:bg-emerald-100 uppercase tracking-tighter border border-emerald-100 transition-colors">
-                        <IconUpload /> Restore JSON
-                    </button>
-                    <button onClick={exportJSON} className="flex items-center gap-2 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg hover:bg-emerald-100 uppercase tracking-tighter border border-emerald-100 transition-colors shadow-sm">
-                        <IconDatabase /> Backup JSON
-                    </button>
-                    <button onClick={() => fileInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-indigo-700 bg-indigo-50 px-3 py-2 rounded-lg hover:bg-indigo-100 uppercase tracking-tighter border border-indigo-100 transition-colors">
+                    {/* CLEAN MENU: ONLY IMPORT AND EXPORT CSV BUTTONS REMAIN */}
+                    <button onClick={() => fileInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-indigo-700 bg-indigo-50 px-4 py-2 rounded-lg hover:bg-indigo-100 uppercase tracking-widest border border-indigo-200 transition-colors shadow-sm">
                         <IconUpload /> Import CSV
                     </button>
-                    <button onClick={exportCSV} className="flex items-center gap-2 text-[10px] font-bold text-blue-700 bg-blue-50 px-3 py-2 rounded-lg hover:bg-blue-100 uppercase tracking-tighter border border-blue-100 transition-colors">
+                    <button onClick={exportCSV} className="flex items-center gap-2 text-[10px] font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 uppercase tracking-widest border border-blue-200 transition-colors shadow-sm">
                         <IconFileText /> Export CSV
                     </button>
-                    <button onClick={() => exportHTML()} className="flex items-center gap-2 text-[10px] font-bold text-slate-700 bg-slate-100 px-3 py-2 rounded-lg hover:bg-slate-200 uppercase tracking-tighter border border-slate-200 transition-colors shadow-sm hidden lg:flex">
-                        <IconDownload /> DL App
-                    </button>
                     
-                    <div className="text-right border-l pl-4 border-slate-200 ml-2">
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-tighter">Vault Value</p>
-                        <p className="text-2xl font-black text-emerald-600">${formatCurrency(inventory.reduce((sum, g) => sum + safeNumber(g.price), 0))}</p>
+                    <div className="text-right border-l border-slate-200 pl-4 ml-2">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Vault Value</p>
+                        <p className="text-xl font-black text-emerald-600">${formatCurrency(inventory.reduce((sum, g) => sum + safeNumber(g.price), 0))}</p>
                     </div>
                 </div>
             </div>
@@ -566,7 +505,7 @@ export default function App() {
                                         <input type="number" step="0.01" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-white" placeholder="0.00" value={newGem.cost} onChange={e => setNewGem({...newGem, cost: e.target.value})} />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Market Val $</label>
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Retail Val $</label>
                                         <input type="number" step="0.01" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-white font-bold text-emerald-700" placeholder="0.00" value={newGem.price} onChange={e => setNewGem({...newGem, price: e.target.value})} />
                                     </div>
                                 </div>
@@ -575,7 +514,6 @@ export default function App() {
                                 </div>
                             </div>
 
-                            {/* RESTORED PHOTO UPLOAD BLOCK */}
                             <div className="flex justify-center pt-2">
                                 <div className="relative group w-32 h-32">
                                     <div className={`w-full h-full rounded-xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-colors ${newGem.image ? 'border-emerald-200' : 'border-slate-300 hover:border-emerald-400 bg-white'}`}>
@@ -610,7 +548,6 @@ export default function App() {
                                     <th className="p-4 sort-header" onClick={() => requestSort('weight')} title="Sort by Carat Weight">
                                         Profile & Specs{renderSortIcon('weight')}
                                     </th>
-                                    {/* RENAMED TO SPARKLE TOKENS */}
                                     <th className="p-4 sort-header" onClick={() => requestSort('price')} title="Sort by Market Value">
                                         Sparkle Tokens{renderSortIcon('price')}
                                     </th>
@@ -685,7 +622,6 @@ export default function App() {
                                             <div className="flex flex-col items-end gap-2">
                                                 <div className="flex gap-1">
                                                     <button title="Edit Gem" onClick={() => startEdit(gem)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-100"><IconEdit /></button>
-                                                    {/* RESTORED PRINT LABEL BUTTON */}
                                                     <button title="Print Label" onClick={() => {setSelectedGem(gem); setView('label')}} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"><IconLabel /></button>
                                                 </div>
                                                 <button title="Delete" onClick={() => deleteGem(gem.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><IconTrash /></button>
@@ -719,7 +655,6 @@ export default function App() {
                     </button>
                 </div>
             </nav>
-            {/* SWITCH BETWEEN INVENTORY AND LABEL PRINTER */}
             {view === 'list' ? renderInventory() : renderLabel()}
             <footer className="p-8 text-center text-slate-300 text-[10px] uppercase tracking-[0.2em] no-print">&copy; Platypus Gems • Cloud Vault Encryption • Automated Database Sync</footer>
         </div>
