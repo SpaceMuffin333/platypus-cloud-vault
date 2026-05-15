@@ -8,9 +8,11 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const generateId = () => `PG-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
 
+// Safe math formatter to prevent "mucked up" numbers from Excel junk
+const safeNumber = (val) => Number(String(val).replace(/[^0-9.-]+/g,"")) || 0;
+
 const formatCurrency = (value) => {
-    const num = Number(value) || 0;
-    return num.toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return safeNumber(value).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
 const GEM_DATA = {
@@ -38,6 +40,9 @@ const IconTrash = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" heigh
 const IconEdit = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
 const IconCamera = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>;
 const IconUpload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>;
+const IconDownload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
+const IconFileText = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
+const IconDatabase = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>;
 const IconLogOut = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>;
 
 const defaultGemState = {
@@ -65,17 +70,16 @@ export default function App() {
     const [newGem, setNewGem] = useState(defaultGemState);
 
     const fileInputRef = useRef(null);
+    const jsonInputRef = useRef(null);
 
     // --- CHECK LOGIN STATUS ON LOAD ---
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
         });
-
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
         });
-
         return () => subscription.unsubscribe();
     }, []);
 
@@ -117,6 +121,7 @@ export default function App() {
         setLastUpdated(`${dateStr} ${timeStr}`);
     };
 
+    // --- THE RESTORED PHOTO UPLOAD FUNCTION ---
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -127,7 +132,84 @@ export default function App() {
         setNewGem(prev => ({ ...prev, image: publicUrlData.publicUrl }));
     };
 
-    // --- BULK CSV IMPORT WITH GHOSTBUSTER FIX ---
+    const getTimestamp = () => {
+        const now = new Date();
+        return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0') + "_" + String(now.getHours()).padStart(2, '0') + "-" + String(now.getMinutes()).padStart(2, '0');
+    };
+
+    // --- THE RESTORED OFFLINE TOOLS ---
+    const exportHTML = () => {
+        const htmlContent = document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `PG_Vault_Backup_${getTimestamp()}.html`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const exportJSON = () => {
+        if (inventory.length === 0) { alert("Nothing to export."); return; }
+        const dataStr = JSON.stringify(inventory);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `PG_Full_Backup_${getTimestamp()}.json`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const importJSON = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            try {
+                const parsedData = JSON.parse(event.target.result);
+                if (Array.isArray(parsedData)) {
+                    const { error } = await supabase.from('gems').upsert(parsedData);
+                    if (error) throw error;
+                    setInventory(prev => {
+                        const newInv = [...prev];
+                        parsedData.forEach(importedGem => {
+                            const existingIdx = newInv.findIndex(g => g.id === importedGem.id);
+                            if (existingIdx >= 0) newInv[existingIdx] = { ...newInv[existingIdx], ...importedGem };
+                            else newInv.unshift(importedGem);
+                        });
+                        return newInv;
+                    });
+                    alert(`Successfully restored ${parsedData.length} items to the cloud vault.`);
+                }
+            } catch (err) { alert("Error restoring to cloud: " + err.message); }
+        };
+        reader.readAsText(file);
+        e.target.value = null;
+    };
+
+    const exportCSV = () => {
+        if (inventory.length === 0) { alert("Nothing to export."); return; }
+        const headers = ['Gem Ref #', 'Vault ID', 'Variety', 'Color', 'Cut', 'Clarity', 'Carats (ct)', 'Length (mm)', 'Width (mm)', 'Depth (mm)', 'Treatment', 'Origin', 'Certificate', 'Vendor', 'Purchase Date', 'Storage Location', 'Cost ($)', 'Market Value ($)', 'Price/ct ($)', 'Private Notes'];
+        const csvRows = [headers.join(',')];
+        inventory.forEach(gem => {
+            const pricePerCt = safeNumber(gem.weight) > 0 ? (safeNumber(gem.price) / safeNumber(gem.weight)).toFixed(2) : 0;
+            const values = [gem.sheetNum || '', gem.id, `"${(gem.type || '').replace(/"/g, '""')}"`, `"${(gem.color || '').replace(/"/g, '""')}"`, `"${(gem.cut || '').replace(/"/g, '""')}"`, `"${(gem.clarity || '').replace(/"/g, '""')}"`, gem.weight || '0', gem.dimL || '0', gem.dimW || '0', gem.dimD || '0', `"${(gem.treatment || '').replace(/"/g, '""')}"`, `"${(gem.origin || '').replace(/"/g, '""')}"`, `"${(gem.certificate || '').replace(/"/g, '""')}"`, `"${(gem.vendor || '').replace(/"/g, '""')}"`, `"${(gem.purchaseDate || '').replace(/"/g, '""')}"`, `"${(gem.location || '').replace(/"/g, '""')}"`, gem.cost || '0', gem.price || '0', pricePerCt, `"${(gem.notes || '').replace(/"/g, '""')}"`];
+            csvRows.push(values.join(','));
+        });
+        const csvContent = "\ufeff" + csvRows.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `PG_Inventory_Export_${getTimestamp()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const importCSV = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -138,7 +220,6 @@ export default function App() {
             const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
             if (lines.length < 2) return alert("Invalid or empty CSV file.");
 
-            // GHOSTBUSTER: .replace(/^\uFEFF/, '') removes the invisible Excel character!
             const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').replace(/^\uFEFF/, ''));
             const parsedGems = [];
 
@@ -259,7 +340,7 @@ export default function App() {
         return sortConfig.direction === 'ascending' ? <IconAsc /> : <IconDesc />;
     };
 
-    const formPpc = Number(newGem.weight) > 0 ? formatCurrency(Number(newGem.price) / Number(newGem.weight)) : '0.00';
+    const formPpc = safeNumber(newGem.weight) > 0 ? formatCurrency(safeNumber(newGem.price) / safeNumber(newGem.weight)) : '0.00';
 
     // --- LOGIN SCREEN COMPONENT ---
     if (!session) {
@@ -291,26 +372,50 @@ export default function App() {
         );
     }
 
-    // --- MAIN VAULT VIEW ---
-    return (
-        <div className="min-h-screen bg-slate-50 font-sans">
-            <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
-                <div className="flex items-center gap-4 group cursor-default">
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-inner border border-emerald-500/20 logo-hover transition-all duration-500"><IconPlatypus className="w-10 h-10" /></div>
-                    <div className="flex flex-col"><span className="font-black text-2xl italic tracking-tighter uppercase leading-none">PLATYPUS GEMS</span><span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70">Privé Inventory Vault</span></div>
-                </div>
-                <div className="flex items-center gap-6">
-                    <div className="hidden md:block text-right"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Vault Sync State</p><p className="text-xs font-mono text-emerald-400 uppercase tracking-tighter">Ready • {lastUpdated}</p></div>
-                    <div className="bg-emerald-500/10 text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-bold border border-emerald-500/20 tracking-widest uppercase flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>Secure Mode
+    // --- RESTORED LABEL VIEW ---
+    const renderLabel = () => {
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${selectedGem.id}`;
+        return (
+            <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 bg-slate-50">
+                <div className="bg-white border-2 border-slate-900 p-6 rounded-none w-80 shadow-2xl print:shadow-none print:m-0 relative" id="printable-label">
+                    <div className="absolute top-0 right-0 bg-slate-900 text-white px-2 py-1 font-black text-sm">{selectedGem.sheetNum || '-'}</div>
+                    <div className="text-center space-y-2 border-b-2 border-slate-900 pb-4 mb-4">
+                        <h1 className="text-2xl font-black uppercase tracking-tighter italic">PLATYPUS GEMS</h1>
+                        <p className="text-[10px] font-bold uppercase text-slate-500 tracking-widest italic">Vault Inventory Item</p>
                     </div>
-                    <button onClick={handleLogOut} className="flex items-center gap-2 text-[10px] font-bold text-slate-300 hover:text-white uppercase tracking-widest transition-colors border-l border-slate-700 pl-6 ml-2">
-                        <IconLogOut /> Exit Vault
-                    </button>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="space-y-4">
+                            <img src={qrUrl} className="w-24 h-24" alt="QR" />
+                            <div className="text-left space-y-1">
+                                <p className="text-sm font-black uppercase tracking-wide">{selectedGem.type}</p>
+                                <p className="text-[10px] font-bold text-slate-600">{selectedGem.weight}ct • {selectedGem.cut}</p>
+                                {selectedGem.dimL && <p className="text-[9px] text-slate-400">{selectedGem.dimL}x{selectedGem.dimW}x{selectedGem.dimD}mm</p>}
+                            </div>
+                        </div>
+                        <div className="flex flex-col justify-between">
+                            <div className="w-full aspect-square border border-slate-200 rounded overflow-hidden p-1">
+                                {selectedGem.image ? <img src={selectedGem.image} className="w-full h-full object-cover rounded-sm" /> : <div className="w-full h-full flex items-center justify-center text-slate-200 text-xs">NO PHOTO</div>}
+                            </div>
+                            <p className="text-[9px] font-mono mt-2 text-slate-400 bg-slate-50 text-center py-1 border border-slate-100">{selectedGem.id}</p>
+                        </div>
+                    </div>
+                    <div className="text-[9px] text-slate-500 border-t border-slate-200 pt-2 mb-2 flex justify-between uppercase">
+                        <span>{selectedGem.treatment || 'Treatment Unspec.'}</span>
+                        <span>{selectedGem.origin || 'Origin Unspec.'}</span>
+                    </div>
+                    <div className="border-t-2 border-slate-900 pt-2 mt-2 text-center"><p className="text-[10px] font-black tracking-widest text-slate-800">LOC: {selectedGem.location || 'SECURE VAULT'}</p></div>
                 </div>
-            </nav>
-            
-            <div className="max-w-[90rem] mx-auto p-6 space-y-8 no-print">
+                <div className="mt-8 flex gap-4 no-print">
+                    <button onClick={() => setView('list')} className="px-6 py-2 border border-slate-300 rounded-xl hover:bg-white transition text-sm font-bold">Back to Inventory</button>
+                    <button onClick={() => window.print()} className="px-6 py-2 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition text-sm shadow-lg shadow-emerald-200">Print Label</button>
+                </div>
+            </div>
+        );
+    };
+
+    // --- MAIN VAULT VIEW ---
+    const renderInventory = () => (
+        <div className="max-w-[90rem] mx-auto p-6 space-y-8 no-print">
             <div className="flex flex-col md:flex-row justify-between gap-4 items-end">
                 <div className="w-full md:w-1/3">
                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Search Vault</label>
@@ -323,14 +428,28 @@ export default function App() {
                 </div>
                 <div className="flex flex-wrap gap-3 items-center justify-end mt-4 md:mt-0">
                     <input type="file" accept=".csv" ref={fileInputRef} onChange={importCSV} className="hidden" />
+                    <input type="file" accept=".json" ref={jsonInputRef} onChange={importJSON} className="hidden" />
                     
+                    {/* RESTORED ALL BUTTONS INCLUDING EXPORT CSV */}
+                    <button onClick={() => jsonInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg hover:bg-emerald-100 uppercase tracking-tighter border border-emerald-100 transition-colors">
+                        <IconUpload /> Restore JSON
+                    </button>
+                    <button onClick={exportJSON} className="flex items-center gap-2 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg hover:bg-emerald-100 uppercase tracking-tighter border border-emerald-100 transition-colors shadow-sm">
+                        <IconDatabase /> Backup JSON
+                    </button>
                     <button onClick={() => fileInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-indigo-700 bg-indigo-50 px-3 py-2 rounded-lg hover:bg-indigo-100 uppercase tracking-tighter border border-indigo-100 transition-colors">
                         <IconUpload /> Import CSV
+                    </button>
+                    <button onClick={exportCSV} className="flex items-center gap-2 text-[10px] font-bold text-blue-700 bg-blue-50 px-3 py-2 rounded-lg hover:bg-blue-100 uppercase tracking-tighter border border-blue-100 transition-colors">
+                        <IconFileText /> Export CSV
+                    </button>
+                    <button onClick={() => exportHTML()} className="flex items-center gap-2 text-[10px] font-bold text-slate-700 bg-slate-100 px-3 py-2 rounded-lg hover:bg-slate-200 uppercase tracking-tighter border border-slate-200 transition-colors shadow-sm hidden lg:flex">
+                        <IconDownload /> DL App
                     </button>
                     
                     <div className="text-right border-l pl-4 border-slate-200 ml-2">
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-tighter">Vault Value</p>
-                        <p className="text-2xl font-black text-emerald-600">${formatCurrency(inventory.reduce((sum, g) => sum + (Number(g.price) || 0), 0))}</p>
+                        <p className="text-2xl font-black text-emerald-600">${formatCurrency(inventory.reduce((sum, g) => sum + safeNumber(g.price), 0))}</p>
                     </div>
                 </div>
             </div>
@@ -389,6 +508,54 @@ export default function App() {
                                 </div>
                             </div>
 
+                            <div className="space-y-3 pt-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="h-px bg-slate-200 flex-grow"></div>
+                                    <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Gemological</span>
+                                    <div className="h-px bg-slate-200 flex-grow"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Origin</label>
+                                        <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="e.g. Mogok" value={newGem.origin} onChange={e => setNewGem({...newGem, origin: e.target.value})} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Treatment</label>
+                                        <input list="gem-treatments" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Select..." value={newGem.treatment} onChange={e => setNewGem({...newGem, treatment: e.target.value})} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Clarity</label>
+                                        <input list="gem-clarity" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Select..." value={newGem.clarity} onChange={e => setNewGem({...newGem, clarity: e.target.value})} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Cert #</label>
+                                        <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="GIA/GRS..." value={newGem.certificate} onChange={e => setNewGem({...newGem, certificate: e.target.value})} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="h-px bg-slate-200 flex-grow"></div>
+                                    <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Operational</span>
+                                    <div className="h-px bg-slate-200 flex-grow"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Vendor</label>
+                                        <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Dealer name..." value={newGem.vendor} onChange={e => setNewGem({...newGem, vendor: e.target.value})} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Date Acquired</label>
+                                        <input type="date" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent text-slate-600" value={newGem.purchaseDate} onChange={e => setNewGem({...newGem, purchaseDate: e.target.value})} />
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Storage Box</label>
+                                    <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Location" value={newGem.location} onChange={e => setNewGem({...newGem, location: e.target.value})} />
+                                </div>
+                            </div>
+
                             <div className="space-y-3 pt-2 bg-slate-100/50 p-2 rounded-xl border border-slate-100">
                                 <div className="flex items-center gap-2">
                                     <span className="text-[9px] uppercase font-bold text-emerald-600 tracking-widest ml-1">Financial Data</span>
@@ -403,6 +570,25 @@ export default function App() {
                                         <input type="number" step="0.01" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-white font-bold text-emerald-700" placeholder="0.00" value={newGem.price} onChange={e => setNewGem({...newGem, price: e.target.value})} />
                                     </div>
                                 </div>
+                                <div className="text-right">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-white px-2 py-1 rounded border border-slate-200 shadow-sm">Calc $/ct: ${formPpc}</span>
+                                </div>
+                            </div>
+
+                            {/* RESTORED PHOTO UPLOAD BLOCK */}
+                            <div className="flex justify-center pt-2">
+                                <div className="relative group w-32 h-32">
+                                    <div className={`w-full h-full rounded-xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-colors ${newGem.image ? 'border-emerald-200' : 'border-slate-300 hover:border-emerald-400 bg-white'}`}>
+                                        {newGem.image ? <img src={newGem.image} className="w-full h-full object-cover" /> : <div className="text-center p-2"><IconCamera /><p className="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-tighter">Attach</p></div>}
+                                        <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                    </div>
+                                    {newGem.image && <button type="button" onClick={() => setNewGem(p => ({...p, image: ''}))} className="absolute -top-2 -right-2 p-1 bg-white border border-slate-200 rounded-full text-red-500 hover:bg-red-50 shadow-sm transition-colors"><IconTrash /></button>}
+                                </div>
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase">Private Notes</label>
+                                <textarea className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm h-16 bg-white" placeholder="Specific inclusions, client notes..." value={newGem.notes} onChange={e => setNewGem({...newGem, notes: e.target.value})} />
                             </div>
 
                             <button className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg active:scale-[0.98] text-white ${isEditing ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200' : 'bg-slate-900 hover:bg-black shadow-slate-300'}`}>
@@ -424,8 +610,9 @@ export default function App() {
                                     <th className="p-4 sort-header" onClick={() => requestSort('weight')} title="Sort by Carat Weight">
                                         Profile & Specs{renderSortIcon('weight')}
                                     </th>
+                                    {/* RENAMED TO SPARKLE TOKENS */}
                                     <th className="p-4 sort-header" onClick={() => requestSort('price')} title="Sort by Market Value">
-                                        Finances ($/ct){renderSortIcon('price')}
+                                        Sparkle Tokens{renderSortIcon('price')}
                                     </th>
                                     <th className="p-4">Logistics</th>
                                     <th className="p-4 text-right rounded-tr-2xl">Actions</th>
@@ -445,8 +632,8 @@ export default function App() {
                                     let aVal = a[sortConfig.key] || 0;
                                     let bVal = b[sortConfig.key] || 0;
                                     if (['weight', 'price', 'sheetNum'].includes(sortConfig.key)) {
-                                        aVal = Number(aVal);
-                                        bVal = Number(bVal);
+                                        aVal = safeNumber(aVal);
+                                        bVal = safeNumber(bVal);
                                     } else {
                                         aVal = String(aVal).toLowerCase();
                                         bVal = String(bVal).toLowerCase();
@@ -455,7 +642,7 @@ export default function App() {
                                     if (aVal > bVal) return sortConfig.direction === 'ascending' ? 1 : -1;
                                     return 0;
                                 }).map(gem => {
-                                    const ppcRow = Number(gem.weight) > 0 ? formatCurrency(Number(gem.price) / Number(gem.weight)) : '0.00';
+                                    const ppcRow = safeNumber(gem.weight) > 0 ? formatCurrency(safeNumber(gem.price) / safeNumber(gem.weight)) : '0.00';
                                     return (
                                     <tr key={gem.id} className={`transition-colors ${editId === gem.id ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
                                         <td className="p-4 align-top">
@@ -478,6 +665,12 @@ export default function App() {
                                                 <span className="bg-slate-100 px-1 rounded">{gem.cut || 'Uncut'}</span>
                                                 {gem.dimL && gem.dimW && <span className="ml-2 text-slate-400">{gem.dimL}x{gem.dimW}{gem.dimD ? `x${gem.dimD}` : ''}mm</span>}
                                             </div>
+                                            <div className="text-[10px] text-slate-400 grid grid-cols-2 gap-x-2 gap-y-1">
+                                                <div><span className="font-bold uppercase">Org:</span> {gem.origin || '-'}</div>
+                                                <div><span className="font-bold uppercase">Trt:</span> {gem.treatment || '-'}</div>
+                                                <div><span className="font-bold uppercase">Clr:</span> {gem.clarity || '-'}</div>
+                                                <div><span className="font-bold uppercase">Crt:</span> {gem.certificate || '-'}</div>
+                                            </div>
                                         </td>
                                         <td className="p-4 align-top">
                                             <div className="text-emerald-700 font-black text-lg">${formatCurrency(gem.price)}</div>
@@ -486,22 +679,49 @@ export default function App() {
                                         </td>
                                         <td className="p-4 align-top">
                                             <div className="mb-2"><span className="px-2 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-md text-[10px] font-bold uppercase tracking-wider">{gem.location || 'Vault'}</span></div>
-                                            <div className="text-[10px] text-slate-500"><div className="truncate w-24" title={gem.vendor}>Vnd: {gem.vendor || '-'}</div></div>
+                                            <div className="text-[10px] text-slate-500"><div className="truncate w-24" title={gem.vendor}>Vnd: {gem.vendor || '-'}</div><div>Dt: {gem.purchaseDate || '-'}</div></div>
                                         </td>
                                         <td className="p-4 text-right align-top">
                                             <div className="flex flex-col items-end gap-2">
-                                                <button title="Edit Gem" onClick={() => startEdit(gem)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-100"><IconEdit /></button>
+                                                <div className="flex gap-1">
+                                                    <button title="Edit Gem" onClick={() => startEdit(gem)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-100"><IconEdit /></button>
+                                                    {/* RESTORED PRINT LABEL BUTTON */}
+                                                    <button title="Print Label" onClick={() => {setSelectedGem(gem); setView('label')}} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"><IconLabel /></button>
+                                                </div>
                                                 <button title="Delete" onClick={() => deleteGem(gem.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><IconTrash /></button>
                                             </div>
                                         </td>
                                     </tr>
                                 )})}
+                                {inventory.length === 0 && <tr><td colSpan="6" className="p-20 text-center text-slate-400 italic font-medium">No stones found. Awaiting initial registration.</td></tr>}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
+    );
+
+    return (
+        <div className="min-h-screen bg-slate-50 font-sans">
+            <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
+                <div className="flex items-center gap-4 group cursor-default">
+                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-inner border border-emerald-500/20 logo-hover transition-all duration-500"><IconPlatypus className="w-10 h-10" /></div>
+                    <div className="flex flex-col"><span className="font-black text-2xl italic tracking-tighter uppercase leading-none">PLATYPUS GEMS</span><span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70">Privé Inventory Vault</span></div>
+                </div>
+                <div className="flex items-center gap-6">
+                    <div className="hidden md:block text-right"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Vault Sync State</p><p className="text-xs font-mono text-emerald-400 uppercase tracking-tighter">Ready • {lastUpdated}</p></div>
+                    <div className="bg-emerald-500/10 text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-bold border border-emerald-500/20 tracking-widest uppercase flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>Secure Mode
+                    </div>
+                    <button onClick={handleLogOut} className="flex items-center gap-2 text-[10px] font-bold text-slate-300 hover:text-white uppercase tracking-widest transition-colors border-l border-slate-700 pl-6 ml-2">
+                        <IconLogOut /> Exit Vault
+                    </button>
+                </div>
+            </nav>
+            {/* SWITCH BETWEEN INVENTORY AND LABEL PRINTER */}
+            {view === 'list' ? renderInventory() : renderLabel()}
+            <footer className="p-8 text-center text-slate-300 text-[10px] uppercase tracking-[0.2em] no-print">&copy; Platypus Gems • Cloud Vault Encryption • Automated Database Sync</footer>
         </div>
     );
 }
