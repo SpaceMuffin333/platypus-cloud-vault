@@ -22,23 +22,45 @@ const isImage = (fileName) => {
 };
 
 const GEM_DATA = {
-    varieties: ["Diamond", "Sapphire", "Ruby", "Emerald", "Alexandrite", "Amethyst", "Aquamarine", "Citrine", "Garnet", "Morganite", "Opal", "Peridot", "Spinel", "Tanzanite", "Topaz", "Tourmaline", "Zircon"],
-    cuts: ["Round Brilliant", "Oval", "Cushion", "Emerald Cut", "Princess", "Pear", "Marquise", "Radiant", "Asscher", "Heart", "Baguette", "Trillion", "Cabochon"],
-    colors: ["D-F (Colorless)", "G-J (Near Colorless)", "Pigeon Blood Red", "Royal Blue", "Cornflower Blue", "Padparadscha", "Vivid Green", "Deep Purple", "Teal", "Pink", "Yellow", "Bi-Color"],
-    clarity: ["FL (Flawless)", "IF (Internally Flawless)", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1", "Eye Clean", "Lightly Included", "Heavily Included"],
-    treatments: ["Unheated", "Heated", "H (Heated)", "H(a) (Flux)", "H(b) (Beryllium)", "Oiled", "Irradiated", "Diffusion", "Glass Filled", "None"]
+    varieties: [
+        "Diamond", "Sapphire", "Ruby", "Emerald", "Alexandrite", "Amethyst", 
+        "Aquamarine", "Citrine", "Garnet", "Morganite", "Opal", "Peridot", 
+        "Spinel", "Tanzanite", "Topaz", "Tourmaline", "Zircon"
+    ],
+    cuts: [
+        "Round Brilliant", "Oval", "Cushion", "Emerald Cut", "Princess", "Pear", 
+        "Marquise", "Radiant", "Asscher", "Heart", "Baguette", "Trillion", "Cabochon"
+    ],
+    colors: [
+        "D-F (Colorless)", "G-J (Near Colorless)", "Pigeon Blood Red", "Royal Blue", 
+        "Cornflower Blue", "Padparadscha", "Vivid Green", "Deep Purple", "Teal", 
+        "Pink", "Yellow", "Bi-Color"
+    ],
+    clarity: [
+        "FL (Flawless)", "IF (Internally Flawless)", "VVS1", "VVS2", "VS1", "VS2", 
+        "SI1", "SI2", "I1", "Eye Clean", "Lightly Included", "Heavily Included"
+    ],
+    treatments: [
+        "Unheated", "Heated", "H (Heated)", "H(a) (Flux)", "H(b) (Beryllium)", 
+        "Oiled", "Irradiated", "Diffusion", "Glass Filled", "None"
+    ]
 };
 
 // --- ICONS ---
 const IconPlatypus = ({ className = "w-8 h-8" }) => (
-    <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg"><path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" /><path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><circle cx="72" cy="42" r="2.5" fill="currentColor" /><path d="M55 40L58 50L68 53L58 56L55 66L52 56L42 53L52 50L55 40Z" fill="#10b981" /></svg>
+    <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
+        <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="72" cy="42" r="2.5" fill="currentColor" />
+        <path d="M55 40L58 50L68 53L58 56L55 66L52 56L42 53L52 50L55 40Z" fill="#10b981" />
+    </svg>
 );
 const IconAsc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1 text-emerald-500 mb-0.5"><polyline points="18 15 12 9 6 15"></polyline></svg>;
 const IconDesc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1 text-emerald-500 mb-0.5"><polyline points="6 9 12 15 18 9"></polyline></svg>;
 const IconLabel = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg>;
 const IconTrash = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
 const IconEdit = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
-// Updated to accept generic sizes
 const IconCamera = ({ className = "w-5 h-5" }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>;
 const IconUpload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>;
 const IconFileText = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
@@ -110,7 +132,9 @@ export default function App() {
 
     const updateTimestamp = () => {
         const d = new Date();
-        setLastUpdated(`${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+        const dateStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setLastUpdated(`${dateStr} ${timeStr}`);
     };
 
     const handleImageUpload = async (e) => {
@@ -128,7 +152,12 @@ export default function App() {
 
     const getTimestamp = () => {
         const now = new Date();
-        return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0') + "_" + String(now.getHours()).padStart(2, '0') + "-" + String(now.getMinutes()).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const hh = String(now.getHours()).padStart(2, '0');
+        const min = String(now.getMinutes()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}_${hh}-${min}`;
     };
 
     const exportCSV = () => {
@@ -136,13 +165,41 @@ export default function App() {
             alert("Nothing to export.");
             return;
         }
-        const headers = ['Gem Ref #', 'Vault ID', 'Variety', 'Color', 'Cut', 'Clarity', 'Carats (ct)', 'Length (mm)', 'Width (mm)', 'Depth (mm)', 'Treatment', 'Origin', 'Certificate', 'Vendor', 'Purchase Date', 'Storage Location', 'Cost ($)', 'Retail Value ($)', 'Price/ct ($)', 'Private Notes'];
+        const headers = [
+            'Gem Ref #', 'Vault ID', 'Variety', 'Color', 'Cut', 'Clarity', 
+            'Carats (ct)', 'Length (mm)', 'Width (mm)', 'Depth (mm)', 
+            'Treatment', 'Origin', 'Certificate', 'Vendor', 'Purchase Date', 
+            'Storage Location', 'Cost ($)', 'Retail Value ($)', 'Price/ct ($)', 'Private Notes'
+        ];
         const csvRows = [headers.join(',')];
+        
         inventory.forEach(gem => {
             const pricePerCt = safeNumber(gem.weight) > 0 ? (safeNumber(gem.price) / safeNumber(gem.weight)).toFixed(2) : 0;
-            const values = [gem.sheetNum || '', gem.id, `"${(gem.type || '').replace(/"/g, '""')}"`, `"${(gem.color || '').replace(/"/g, '""')}"`, `"${(gem.cut || '').replace(/"/g, '""')}"`, `"${(gem.clarity || '').replace(/"/g, '""')}"`, gem.weight || '0', gem.dimL || '0', gem.dimW || '0', gem.dimD || '0', `"${(gem.treatment || '').replace(/"/g, '""')}"`, `"${(gem.origin || '').replace(/"/g, '""')}"`, `"${(gem.certificate || '').replace(/"/g, '""')}"`, `"${(gem.vendor || '').replace(/"/g, '""')}"`, `"${(gem.purchaseDate || '').replace(/"/g, '""')}"`, `"${(gem.location || '').replace(/"/g, '""')}"`, gem.cost || '0', gem.price || '0', pricePerCt, `"${(gem.notes || '').replace(/"/g, '""')}"`];
+            const values = [
+                gem.sheetNum || '',
+                gem.id,
+                `"${(gem.type || '').replace(/"/g, '""')}"`,
+                `"${(gem.color || '').replace(/"/g, '""')}"`,
+                `"${(gem.cut || '').replace(/"/g, '""')}"`,
+                `"${(gem.clarity || '').replace(/"/g, '""')}"`,
+                gem.weight || '0',
+                gem.dimL || '0',
+                gem.dimW || '0',
+                gem.dimD || '0',
+                `"${(gem.treatment || '').replace(/"/g, '""')}"`,
+                `"${(gem.origin || '').replace(/"/g, '""')}"`,
+                `"${(gem.certificate || '').replace(/"/g, '""')}"`,
+                `"${(gem.vendor || '').replace(/"/g, '""')}"`,
+                `"${(gem.purchaseDate || '').replace(/"/g, '""')}"`,
+                `"${(gem.location || '').replace(/"/g, '""')}"`,
+                gem.cost || '0',
+                gem.price || '0',
+                pricePerCt,
+                `"${(gem.notes || '').replace(/"/g, '""')}"`
+            ];
             csvRows.push(values.join(','));
         });
+        
         const blob = new Blob(["\ufeff" + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.setAttribute("href", URL.createObjectURL(blob));
@@ -174,10 +231,13 @@ export default function App() {
                 }
                 values.push(val);
                 const cleanValues = values.map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
-                const gem = { ...defaultGemState }; let hasData = false;
+                const gem = { ...defaultGemState }; 
+                let hasData = false;
 
                 headers.forEach((header, index) => {
-                    const v = cleanValues[index] || ''; const h = header.toLowerCase();
+                    const v = cleanValues[index] || ''; 
+                    const h = header.toLowerCase();
+                    
                     if (h.includes('gem ref') || h.includes('sheet ref')) gem.sheetNum = v;
                     else if (h.includes('vault id')) { gem.id = v; if(v) hasData = true; }
                     else if (h.includes('variety')) { gem.type = v; if(v) hasData = true; }
@@ -198,6 +258,7 @@ export default function App() {
                     else if (h.includes('market value') || h.includes('retail value')) gem.price = v;
                     else if (h.includes('private notes')) gem.notes = v;
                 });
+                
                 if (hasData && gem.type) { 
                     if (!gem.id) gem.id = generateId(); 
                     parsedGems.push(gem); 
@@ -344,12 +405,18 @@ export default function App() {
                         <div className="flex justify-center mb-4 text-emerald-600 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] relative">
                             <IconPlatypus className="w-16 h-16 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
                         </div>
-                        <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">Platypus Gems</h1>
-                        <p className="text-xs font-bold uppercase tracking-widest text-emerald-600 mt-2">Secure Vault Access</p>
+                        <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
+                            Platypus Gems
+                        </h1>
+                        <p className="text-xs font-bold uppercase tracking-widest text-emerald-600 mt-2">
+                            Secure Vault Access
+                        </p>
                     </div>
                     <form onSubmit={handleLogin} className="p-8 space-y-6">
                         {authError ? (
-                            <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-lg text-center uppercase tracking-wider border border-red-200">{authError}</div>
+                            <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-lg text-center uppercase tracking-wider border border-red-200">
+                                {authError}
+                            </div>
                         ) : null}
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email Address</label>
@@ -364,7 +431,9 @@ export default function App() {
                         </button>
                     </form>
                 </div>
-                <p className="mt-8 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 text-center">&copy; Platypus Gems • Cloud Encrypted</p>
+                <p className="mt-8 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 text-center">
+                    &copy; Platypus Gems • Cloud Encrypted
+                </p>
             </div>
         );
     }
@@ -375,7 +444,9 @@ export default function App() {
         return (
             <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 bg-slate-50">
                 <div className="bg-white border-2 border-slate-900 p-6 rounded-none w-80 shadow-2xl print:shadow-none print:m-0 relative" id="printable-label">
-                    <div className="absolute top-0 right-0 bg-slate-900 text-white px-2 py-1 font-black text-sm">{selectedGem.sheetNum || '-'}</div>
+                    <div className="absolute top-0 right-0 bg-slate-900 text-white px-2 py-1 font-black text-sm">
+                        {selectedGem.sheetNum || '-'}
+                    </div>
                     <div className="text-center space-y-2 border-b-2 border-slate-900 pb-4 mb-4">
                         <h1 className="text-2xl font-black uppercase tracking-tighter italic">PLATYPUS GEMS</h1>
                         <p className="text-[10px] font-bold uppercase text-slate-500 tracking-widest italic">Vault Inventory Item</p>
@@ -386,7 +457,9 @@ export default function App() {
                             <div className="text-left space-y-1">
                                 <p className="text-sm font-black uppercase tracking-wide">{selectedGem.type}</p>
                                 <p className="text-[10px] font-bold text-slate-600">{selectedGem.weight}ct • {selectedGem.cut}</p>
-                                {selectedGem.dimL ? (<p className="text-[9px] text-slate-400">{selectedGem.dimL}x{selectedGem.dimW}x{selectedGem.dimD}mm</p>) : null}
+                                {selectedGem.dimL ? (
+                                    <p className="text-[9px] text-slate-400">{selectedGem.dimL}x{selectedGem.dimW}x{selectedGem.dimD}mm</p>
+                                ) : null}
                             </div>
                         </div>
                         <div className="flex flex-col justify-between">
@@ -404,7 +477,9 @@ export default function App() {
                         <span>{selectedGem.treatment || 'Treatment Unspec.'}</span>
                         <span>{selectedGem.origin || 'Origin Unspec.'}</span>
                     </div>
-                    <div className="border-t-2 border-slate-900 pt-2 mt-2 text-center"><p className="text-[10px] font-black tracking-widest text-slate-800">LOC: {selectedGem.location || 'SECURE VAULT'}</p></div>
+                    <div className="border-t-2 border-slate-900 pt-2 mt-2 text-center">
+                        <p className="text-[10px] font-black tracking-widest text-slate-800">LOC: {selectedGem.location || 'SECURE VAULT'}</p>
+                    </div>
                 </div>
                 <div className="mt-8 flex gap-4 no-print">
                     <button onClick={() => setView('list')} className="px-6 py-2 border border-slate-300 rounded-xl hover:bg-white transition text-sm font-bold">Back to Inventory</button>
@@ -480,6 +555,7 @@ export default function App() {
                                 {gemAssets.map(asset => (
                                     <div key={asset.id} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 hover:shadow-sm transition-all group">
                                         <div className="flex items-center gap-3 overflow-hidden">
+                                            {/* THUMBNAIL DETECTOR LOGIC */}
                                             {isImage(asset.file_name) ? (
                                                 <div className="w-10 h-10 rounded bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-200">
                                                     <img src={asset.file_url} alt="preview" className="w-full h-full object-cover" />
@@ -742,7 +818,13 @@ export default function App() {
                                             <td className="p-4 align-top">
                                                 <div className="flex gap-4">
                                                     <div className="w-14 h-14 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 shadow-sm">
-                                                        {gem.image ? <img src={gem.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-300"><IconCamera className="w-5 h-5"/></div>}
+                                                        {gem.image ? (
+                                                            <img src={gem.image} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                                <IconCamera className="w-5 h-5"/>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <div>
                                                         <div className="font-black text-slate-800 uppercase tracking-tight text-[15px]">{gem.type}</div>
@@ -805,4 +887,36 @@ export default function App() {
                     <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-[0_0_15px_rgba(168,85,247,0.5)] border border-purple-500/30 logo-hover transition-all duration-500 relative">
                         <IconPlatypus className="w-10 h-10 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
                     </div>
-                    <div className="flex flex-col"><span className="font-black text-2xl italic tracking-tighter uppercase leading-none">PLATYPUS GEMS</span><span className
+                    <div className="flex flex-col">
+                        <span className="font-black text-2xl italic tracking-tighter uppercase leading-none">
+                            PLATYPUS GEMS
+                        </span>
+                        <span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70">
+                            Privé Inventory Vault
+                        </span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-6">
+                    <div className="hidden md:block text-right">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Vault Sync State</p>
+                        <p className="text-xs font-mono text-emerald-400 uppercase tracking-tighter">Ready • {lastUpdated}</p>
+                    </div>
+                    <div className="bg-emerald-500/10 text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-bold border border-emerald-500/20 tracking-widest uppercase flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>Secure Mode
+                    </div>
+                    <button onClick={handleLogOut} className="flex items-center gap-2 text-[10px] font-bold text-slate-300 hover:text-white uppercase tracking-widest transition-colors border-l border-slate-700 pl-6 ml-2">
+                        <IconLogOut /> Exit Vault
+                    </button>
+                </div>
+            </nav>
+            
+            {view === 'list' ? renderInventory() : null}
+            {view === 'label' ? renderLabel() : null}
+            {view === 'details' ? renderGemDetails() : null}
+
+            <footer className="p-8 text-center text-slate-300 text-[10px] uppercase tracking-[0.2em] no-print">
+                &copy; Platypus Gems • Cloud Vault Encryption • Automated Database Sync
+            </footer>
+        </div>
+    );
+}
