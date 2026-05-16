@@ -47,16 +47,14 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-// PERFECTED PLATYPUS: Contains a solid 'blocker' layer to stop internal glow bleeding!
+// PERFECTED PLATYPUS: Lock screen uses blockerColor, Nav screen relies on currentColor for the star color change
 const IconPlatypus = ({ className = "w-8 h-8", blockerColor = "transparent" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* BLOCKER LAYER: Solid shape that matches background, blocking all drop-shadow light from bleeding through */}
         <g fill={blockerColor}>
             <path d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" />
             <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45Z" />
             <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59Z" />
         </g>
-        {/* ORIGINAL ARTWORK LAYER */}
         <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
         <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
@@ -251,7 +249,7 @@ export default function App() {
                     else if (h === 'cut') gem.cut = v;
                     else if (h === 'clarity') gem.clarity = v;
                     else if (h.includes('carats') || h.includes('weight')) gem.weight = v;
-                    else if (h.includes('length')) facility.dimL = v;
+                    else if (h.includes('length')) gem.dimL = v;
                     else if (h.includes('width')) gem.dimW = v;
                     else if (h.includes('depth')) gem.dimD = v;
                     else if (h.includes('treatment')) gem.treatment = v;
@@ -407,12 +405,7 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        
-                        {/* THE ULTIMATE LOCK SCREEN PLATYPUS
-                            1. blockerColor="#ecfdf5" explicitly blocks light passing through the center!
-                            2. text-emerald-500 transitions to text-purple-800 (Dark Royal Purple) on hover!
-                            3. Intense outer-glow logic applied to drop-shadows.
-                        */}
+                        {/* THE ULTIMATE LOCK SCREEN PLATYPUS - UNTOUCHED EXACTLY AS YOU LIKED */}
                         <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-800 cursor-default">
                             <div className="drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_50px_rgba(168,85,247,1)] transition-all duration-500">
                                 <div className="group-hover:drop-shadow-[0_0_20px_rgba(168,85,247,0.9)] transition-all duration-500">
@@ -757,7 +750,6 @@ export default function App() {
 
                                 <div className="flex justify-center pt-2">
                                     <div className="relative group w-32 h-32">
-                                        {/* PERFECTLY CENTERED CAMERA ICON */}
                                         <div className={`w-full h-full rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition-colors ${newGem.image ? 'border-emerald-200' : 'border-slate-300 hover:border-emerald-400 bg-white'}`}>
                                             {newGem.image ? (
                                                 <img src={newGem.image} className="w-full h-full object-cover" />
@@ -900,12 +892,10 @@ export default function App() {
         <div className="min-h-screen bg-emerald-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
-                    {/* THE ULTIMATE NAV PLATYPUS */}
-                    {/* blockerColor="#0f172a" completely stops the bleed. Dark purple (text-purple-800) on hover. */}
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 border border-purple-500/40 transition-all duration-500 relative group-hover:text-purple-800 group-hover:border-purple-500/80">
-                        <div className="drop-shadow-[0_0_12px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_30px_rgba(168,85,247,1)] transition-all duration-500">
-                            <IconPlatypus className="w-10 h-10" blockerColor="#0f172a" />
-                        </div>
+                    {/* RESTORED "GOOD JOB" NAV CONTAINER */}
+                    {/* The square container produces the heavy UV drop shadow, the icon inside glows gently on its lines on hover */}
+                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-[0_0_15px_rgba(168,85,247,0.5)] border border-purple-500/30 transition-all duration-500 relative group-hover:text-purple-500 group-hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] group-hover:border-purple-500/60">
+                        <IconPlatypus className="w-10 h-10 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.9)]" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-black text-2xl italic tracking-tighter uppercase leading-none">
