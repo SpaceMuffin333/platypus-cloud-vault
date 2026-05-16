@@ -46,10 +46,11 @@ const GEM_DATA = {
     ]
 };
 
-// --- HOLLOW NEON ICONS ---
-const IconPlatypus = ({ className = "w-8 h-8" }) => (
+// --- ICONS ---
+// Added a bgColor prop. By matching the background color, the drop-shadow is FORCED to only outline the outer edge.
+const IconPlatypus = ({ className = "w-8 h-8", bgColor = "transparent" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" stroke="currentColor" strokeWidth="2.5" />
+        <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill={bgColor} stroke="currentColor" strokeWidth="2.5" />
         <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <circle cx="72" cy="42" r="2.5" fill="currentColor" />
@@ -398,11 +399,18 @@ export default function App() {
         return (
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
-                    <div className="p-8 text-center bg-emerald-100/40 border-b border-emerald-200/50">
-                        {/* HOLLOW PLATYPUS, BASE UV GLOW, EXTREME PURPLE GLOW ON HOVER */}
-                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-500 cursor-default">
-                            <IconPlatypus className="w-32 h-32 drop-shadow-[0_0_8px_#a855f7] group-hover:drop-shadow-[0_0_25px_#a855f7] transition-all duration-500" />
+                    <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
+                        
+                        {/* HOLLOW PLATYPUS WITH STACKED NEON GLOW */}
+                        {/* By passing bgColor="#ecfdf5" (emerald-50 hex code), the SVG is completely opaque to the CSS shadow, blocking any glow from rendering on the inside! */}
+                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-600 cursor-default">
+                            <div className="drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_40px_rgba(168,85,247,1)] transition-all duration-500">
+                                <div className="drop-shadow-[0_0_5px_rgba(168,85,247,0.6)] group-hover:drop-shadow-[0_0_20px_rgba(168,85,247,1)] transition-all duration-500">
+                                    <IconPlatypus className="w-32 h-32" bgColor="#ecfdf5" />
+                                </div>
+                            </div>
                         </div>
+
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
                             Platypus Gems
                         </h1>
@@ -425,7 +433,7 @@ export default function App() {
                             <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 bg-white/70 border border-emerald-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm font-medium transition-all" placeholder="••••••••" />
                         </div>
                         {/* UNLOCK BUTTON WITH MASSIVE UV GLOW AND PURPLE TEXT ON HOVER */}
-                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 text-white hover:text-purple-400 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-md hover:shadow-[0_0_30px_#a855f7] border border-transparent hover:border-purple-500/50 disabled:opacity-50">
+                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 text-white hover:text-purple-400 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-md hover:shadow-[0_0_40px_8px_rgba(168,85,247,0.8)] border border-transparent hover:border-purple-500/50 disabled:opacity-50">
                             {loadingAuth ? 'Unlocking...' : 'Unlock Vault'}
                         </button>
                     </form>
@@ -880,13 +888,16 @@ export default function App() {
     };
 
     return (
-        // --- SOFT GREEN INVENTORY BACKGROUND APPLIED HERE ---
         <div className="min-h-screen bg-emerald-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
                     {/* HOLLOW PLATYPUS, BASE UV GLOW & HOVER COLOR CHANGE APPLIED HERE */}
                     <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 border border-purple-500/40 transition-all duration-500 relative group-hover:text-purple-500 group-hover:border-purple-500/80">
-                        <IconPlatypus className="w-10 h-10 drop-shadow-[0_0_8px_#a855f7] group-hover:drop-shadow-[0_0_25px_#a855f7] transition-all duration-500" />
+                        <div className="drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_40px_rgba(168,85,247,1)] transition-all duration-500">
+                            <div className="drop-shadow-[0_0_5px_rgba(168,85,247,0.6)] group-hover:drop-shadow-[0_0_20px_rgba(168,85,247,1)] transition-all duration-500">
+                                <IconPlatypus className="w-10 h-10" bgColor="#0f172a" />
+                            </div>
+                        </div>
                     </div>
                     <div className="flex flex-col">
                         <span className="font-black text-2xl italic tracking-tighter uppercase leading-none">
