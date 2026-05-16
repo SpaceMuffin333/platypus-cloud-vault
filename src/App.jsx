@@ -397,16 +397,17 @@ export default function App() {
     if (!session) {
         return (
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
-                <div className="max-w-md w-full bg-purple-50 rounded-2xl shadow-2xl overflow-hidden border border-purple-100">
-                    <div className="p-8 text-center bg-purple-100/40 border-b border-purple-200/50">
-                        {/* SOFT PURPLE/SLATE LOGO WITH SUBTLE PURPLE UV GLOW */}
-                        <div className="flex justify-center mb-4 text-slate-800 transition-colors duration-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.3)] cursor-default">
-                            <IconPlatypus className="w-16 h-16" />
+                {/* SOFT GREEN BACKGROUND INSTEAD OF LAVENDER */}
+                <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
+                    <div className="p-8 text-center bg-emerald-100/40 border-b border-emerald-200/50">
+                        {/* DOUBLE SIZED PLATYPUS, EMERALD -> VIBRANT PURPLE GLOW ON HOVER */}
+                        <div className="flex justify-center mb-6 text-emerald-500 transition-all duration-500 hover:text-purple-600 hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.9)] cursor-default">
+                            <IconPlatypus className="w-32 h-32" />
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
                             Platypus Gems
                         </h1>
-                        <p className="text-xs font-bold uppercase tracking-widest text-purple-600 mt-2 opacity-80">
+                        <p className="text-xs font-bold uppercase tracking-widest text-emerald-600 mt-2 opacity-80">
                             Secure Vault Access
                         </p>
                     </div>
@@ -418,14 +419,14 @@ export default function App() {
                         ) : null}
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Email Address</label>
-                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 bg-white/70 border border-purple-200 rounded-xl outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-sm font-medium transition-all" placeholder="you@example.com" />
+                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 bg-white/70 border border-emerald-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm font-medium transition-all" placeholder="you@example.com" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Master Password</label>
-                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 bg-white/70 border border-purple-200 rounded-xl outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-sm font-medium transition-all" placeholder="••••••••" />
+                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 bg-white/70 border border-emerald-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm font-medium transition-all" placeholder="••••••••" />
                         </div>
-                        {/* SLEEK BUTTON WITH UV HOVER GLOW */}
-                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-md hover:shadow-[0_0_20px_rgba(168,85,247,0.8)] border border-transparent hover:border-purple-500/50 disabled:opacity-50">
+                        {/* UNLOCK BUTTON WITH UV GLOW AND PURPLE TEXT ON HOVER */}
+                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 text-white hover:text-purple-400 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-md hover:shadow-[0_0_30px_rgba(168,85,247,1)] border border-transparent hover:border-purple-500/50 disabled:opacity-50">
                             {loadingAuth ? 'Unlocking...' : 'Unlock Vault'}
                         </button>
                     </form>
