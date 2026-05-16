@@ -38,7 +38,8 @@ const IconDesc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height
 const IconLabel = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg>;
 const IconTrash = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
 const IconEdit = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
-const IconCamera = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>;
+// Updated to accept generic sizes
+const IconCamera = ({ className = "w-5 h-5" }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>;
 const IconUpload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>;
 const IconFileText = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
 const IconLogOut = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>;
@@ -339,7 +340,10 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
                     <div className="p-8 text-center bg-slate-50 border-b border-slate-100">
-                        <div className="flex justify-center mb-4 text-emerald-600"><IconPlatypus className="w-16 h-16" /></div>
+                        {/* PURPLE UV GLOW APPLIED HERE */}
+                        <div className="flex justify-center mb-4 text-emerald-600 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] relative">
+                            <IconPlatypus className="w-16 h-16 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+                        </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">Platypus Gems</h1>
                         <p className="text-xs font-bold uppercase tracking-widest text-emerald-600 mt-2">Secure Vault Access</p>
                     </div>
@@ -661,11 +665,12 @@ export default function App() {
 
                                 <div className="flex justify-center pt-2">
                                     <div className="relative group w-32 h-32">
-                                        <div className={`w-full h-full rounded-xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-colors ${newGem.image ? 'border-emerald-200' : 'border-slate-300 hover:border-emerald-400 bg-white'}`}>
+                                        {/* PERFECTLY CENTERED CAMERA ICON */}
+                                        <div className={`w-full h-full rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition-colors ${newGem.image ? 'border-emerald-200' : 'border-slate-300 hover:border-emerald-400 bg-white'}`}>
                                             {newGem.image ? (
                                                 <img src={newGem.image} className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className="text-center p-2"><IconCamera /><p className="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-tighter">Attach Profile Pic</p></div>
+                                                <IconCamera className="text-slate-300 w-10 h-10" />
                                             )}
                                             <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
                                         </div>
@@ -737,7 +742,7 @@ export default function App() {
                                             <td className="p-4 align-top">
                                                 <div className="flex gap-4">
                                                     <div className="w-14 h-14 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 shadow-sm">
-                                                        {gem.image ? <img src={gem.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-300"><IconCamera /></div>}
+                                                        {gem.image ? <img src={gem.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-300"><IconCamera className="w-5 h-5"/></div>}
                                                     </div>
                                                     <div>
                                                         <div className="font-black text-slate-800 uppercase tracking-tight text-[15px]">{gem.type}</div>
@@ -796,25 +801,8 @@ export default function App() {
         <div className="min-h-screen bg-slate-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-inner border border-emerald-500/20 logo-hover transition-all duration-500"><IconPlatypus className="w-10 h-10" /></div>
-                    <div className="flex flex-col"><span className="font-black text-2xl italic tracking-tighter uppercase leading-none">PLATYPUS GEMS</span><span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70">Privé Inventory Vault</span></div>
-                </div>
-                <div className="flex items-center gap-6">
-                    <div className="hidden md:block text-right"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Vault Sync State</p><p className="text-xs font-mono text-emerald-400 uppercase tracking-tighter">Ready • {lastUpdated}</p></div>
-                    <div className="bg-emerald-500/10 text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-bold border border-emerald-500/20 tracking-widest uppercase flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>Secure Mode
+                    {/* PURPLE UV GLOW APPLIED HERE */}
+                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-[0_0_15px_rgba(168,85,247,0.5)] border border-purple-500/30 logo-hover transition-all duration-500 relative">
+                        <IconPlatypus className="w-10 h-10 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
                     </div>
-                    <button onClick={handleLogOut} className="flex items-center gap-2 text-[10px] font-bold text-slate-300 hover:text-white uppercase tracking-widest transition-colors border-l border-slate-700 pl-6 ml-2">
-                        <IconLogOut /> Exit Vault
-                    </button>
-                </div>
-            </nav>
-            
-            {view === 'list' ? renderInventory() : null}
-            {view === 'label' ? renderLabel() : null}
-            {view === 'details' ? renderGemDetails() : null}
-
-            <footer className="p-8 text-center text-slate-300 text-[10px] uppercase tracking-[0.2em] no-print">&copy; Platypus Gems • Cloud Vault Encryption • Automated Database Sync</footer>
-        </div>
-    );
-}
+                    <div className="flex flex-col"><span className="font-black text-2xl italic tracking-tighter uppercase leading-none">PLATYPUS GEMS</span><span className
