@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const generateId = () => `PG-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
 
-// Safe math formatter to prevent "mucked up" numbers from Excel junk
+// Safe math formatter
 const safeNumber = (val) => Number(String(val).replace(/[^0-9.-]+/g,"")) || 0;
 
 const formatCurrency = (value) => {
@@ -25,13 +25,7 @@ const GEM_DATA = {
 
 // --- ICONS ---
 const IconPlatypus = ({ className = "w-8 h-8" }) => (
-    <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
-        <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        <circle cx="72" cy="42" r="2.5" fill="currentColor" />
-        <path d="M55 40L58 50L68 53L58 56L55 66L52 56L42 53L52 50L55 40Z" fill="#10b981" />
-    </svg>
+    <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg"><path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" /><path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><circle cx="72" cy="42" r="2.5" fill="currentColor" /><path d="M55 40L58 50L68 53L58 56L55 66L52 56L42 53L52 50L55 40Z" fill="#10b981" /></svg>
 );
 const IconAsc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1 text-emerald-500 mb-0.5"><polyline points="18 15 12 9 6 15"></polyline></svg>;
 const IconDesc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1 text-emerald-500 mb-0.5"><polyline points="6 9 12 15 18 9"></polyline></svg>;
@@ -42,6 +36,9 @@ const IconCamera = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" heig
 const IconUpload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>;
 const IconFileText = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
 const IconLogOut = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>;
+const IconFolder = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>;
+const IconBack = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>;
+const IconDownload = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
 
 const defaultGemState = {
     sheetNum: '', type: '', color: '', cut: '', clarity: '', weight: '', cost: '', price: '', location: '', notes: '', image: '',
@@ -49,7 +46,6 @@ const defaultGemState = {
 };
 
 export default function App() {
-    // --- AUTHENTICATION STATE ---
     const [session, setSession] = useState(null);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -61,34 +57,31 @@ export default function App() {
     const [lastUpdated, setLastUpdated] = useState('Never');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'sheetNum', direction: 'ascending' }); 
-    const [view, setView] = useState('list');
+    
+    const [view, setView] = useState('list'); // 'list', 'label', or 'details'
     const [selectedGem, setSelectedGem] = useState(null);
+    const [gemAssets, setGemAssets] = useState([]);
+    const [isUploadingAsset, setIsUploadingAsset] = useState(false);
+
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [newGem, setNewGem] = useState(defaultGemState);
 
     const fileInputRef = useRef(null);
 
-    // --- CHECK LOGIN STATUS ON LOAD ---
+    // --- INITIALIZE AUTH ---
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
+        supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
         return () => subscription.unsubscribe();
     }, []);
 
-    // --- FETCH DATA ONLY IF LOGGED IN ---
+    // --- FETCH INVENTORY ---
     useEffect(() => {
         if (!session) return;
-        
         const fetchGems = async () => {
             const { data, error } = await supabase.from('gems').select('*');
-            if (error) {
-                console.error('Error fetching data:', error);
-            } else {
+            if (!error) {
                 setInventory(data || []);
                 setIsLoaded(true);
                 updateTimestamp();
@@ -97,7 +90,6 @@ export default function App() {
         fetchGems();
     }, [session]);
 
-    // --- AUTH FUNCTIONS ---
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoadingAuth(true);
@@ -107,24 +99,19 @@ export default function App() {
         setLoadingAuth(false);
     };
 
-    const handleLogOut = async () => {
-        await supabase.auth.signOut();
-    };
+    const handleLogOut = async () => await supabase.auth.signOut();
 
     const updateTimestamp = () => {
         const d = new Date();
-        const dateStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        setLastUpdated(`${dateStr} ${timeStr}`);
+        setLastUpdated(`${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
     };
 
-    // --- PHOTO UPLOAD ---
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
         const fileName = `${Date.now()}_${file.name}`;
         const { error: uploadError } = await supabase.storage.from('gem-photos').upload(fileName, file);
-        if (uploadError) return alert("Error uploading photo: " + uploadError.message);
+        if (uploadError) return alert("Error: " + uploadError.message);
         const { data: publicUrlData } = supabase.storage.from('gem-photos').getPublicUrl(fileName);
         setNewGem(prev => ({ ...prev, image: publicUrlData.publicUrl }));
     };
@@ -134,9 +121,8 @@ export default function App() {
         return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0') + "_" + String(now.getHours()).padStart(2, '0') + "-" + String(now.getMinutes()).padStart(2, '0');
     };
 
-    // --- OFFLINE EXPORT TOOL (CLEANED) ---
     const exportCSV = () => {
-        if (inventory.length === 0) { alert("Nothing to export."); return; }
+        if (inventory.length === 0) return alert("Nothing to export.");
         const headers = ['Gem Ref #', 'Vault ID', 'Variety', 'Color', 'Cut', 'Clarity', 'Carats (ct)', 'Length (mm)', 'Width (mm)', 'Depth (mm)', 'Treatment', 'Origin', 'Certificate', 'Vendor', 'Purchase Date', 'Storage Location', 'Cost ($)', 'Retail Value ($)', 'Price/ct ($)', 'Private Notes'];
         const csvRows = [headers.join(',')];
         inventory.forEach(gem => {
@@ -144,51 +130,36 @@ export default function App() {
             const values = [gem.sheetNum || '', gem.id, `"${(gem.type || '').replace(/"/g, '""')}"`, `"${(gem.color || '').replace(/"/g, '""')}"`, `"${(gem.cut || '').replace(/"/g, '""')}"`, `"${(gem.clarity || '').replace(/"/g, '""')}"`, gem.weight || '0', gem.dimL || '0', gem.dimW || '0', gem.dimD || '0', `"${(gem.treatment || '').replace(/"/g, '""')}"`, `"${(gem.origin || '').replace(/"/g, '""')}"`, `"${(gem.certificate || '').replace(/"/g, '""')}"`, `"${(gem.vendor || '').replace(/"/g, '""')}"`, `"${(gem.purchaseDate || '').replace(/"/g, '""')}"`, `"${(gem.location || '').replace(/"/g, '""')}"`, gem.cost || '0', gem.price || '0', pricePerCt, `"${(gem.notes || '').replace(/"/g, '""')}"`];
             csvRows.push(values.join(','));
         });
-        const csvContent = "\ufeff" + csvRows.join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
+        const blob = new Blob(["\ufeff" + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        link.setAttribute("href", url);
+        link.setAttribute("href", URL.createObjectURL(blob));
         link.setAttribute("download", `PG_Inventory_Export_${getTimestamp()}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
     };
 
-    // --- BULK CSV IMPORT (EXCEL GHOSTBUSTER + PRICE FIX) ---
     const importCSV = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        
         const reader = new FileReader();
         reader.onload = async (event) => {
-            const text = event.target.result;
-            const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
-            if (lines.length < 2) return alert("Invalid or empty CSV file.");
-
-            // GHOSTBUSTER: .replace(/^\uFEFF/, '') removes the invisible Excel character!
+            const lines = event.target.result.split(/\r?\n/).filter(line => line.trim() !== '');
+            if (lines.length < 2) return alert("Invalid file.");
             const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').replace(/^\uFEFF/, ''));
             const parsedGems = [];
 
             for (let i = 1; i < lines.length; i++) {
-                const values = [];
-                let inQuotes = false;
-                let val = '';
+                const values = []; let inQuotes = false; let val = '';
                 for (let char of lines[i]) {
                     if (char === '"') inQuotes = !inQuotes;
                     else if (char === ',' && !inQuotes) { values.push(val); val = ''; }
                     else val += char;
                 }
                 values.push(val);
-
                 const cleanValues = values.map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
-                const gem = { ...defaultGemState };
-                let hasData = false;
+                const gem = { ...defaultGemState }; let hasData = false;
 
                 headers.forEach((header, index) => {
-                    const v = cleanValues[index] || '';
-                    const h = header.toLowerCase();
-                    
+                    const v = cleanValues[index] || ''; const h = header.toLowerCase();
                     if (h.includes('gem ref') || h.includes('sheet ref')) gem.sheetNum = v;
                     else if (h.includes('vault id')) { gem.id = v; if(v) hasData = true; }
                     else if (h.includes('variety')) { gem.type = v; if(v) hasData = true; }
@@ -209,19 +180,11 @@ export default function App() {
                     else if (h.includes('market value') || h.includes('retail value')) gem.price = v;
                     else if (h.includes('private notes')) gem.notes = v;
                 });
-
-                if (hasData && gem.type) {
-                    if (!gem.id) gem.id = generateId();
-                    parsedGems.push(gem);
-                }
+                if (hasData && gem.type) { if (!gem.id) gem.id = generateId(); parsedGems.push(gem); }
             }
-
             if (parsedGems.length > 0) {
                 const { error } = await supabase.from('gems').upsert(parsedGems);
-                if (error) {
-                    alert("Error saving CSV to cloud: " + error.message);
-                    return;
-                }
+                if (error) return alert("Error: " + error.message);
                 setInventory(prev => {
                     const newInv = [...prev];
                     parsedGems.forEach(importedGem => {
@@ -231,31 +194,24 @@ export default function App() {
                     });
                     return newInv;
                 });
-                alert(`Successfully imported ${parsedGems.length} items. Retail Values are accurately loaded!`);
+                alert(`Successfully imported ${parsedGems.length} items.`);
             }
         };
-        reader.readAsText(file);
-        e.target.value = null;
+        reader.readAsText(file); e.target.value = null;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!newGem.type) return;
-        
         const gemData = { ...newGem };
         if (!gemData.id) gemData.id = generateId();
-
         const { error } = await supabase.from('gems').upsert(gemData);
-        if (error) return alert("Error saving to cloud: " + error.message);
-
+        if (error) return alert("Error saving: " + error.message);
         if (isEditing) {
             setInventory(inventory.map(item => item.id === editId ? gemData : item));
             setIsEditing(false); setEditId(null);
-        } else {
-            setInventory([gemData, ...inventory]);
-        }
-        setNewGem(defaultGemState);
-        updateTimestamp();
+        } else setInventory([gemData, ...inventory]);
+        setNewGem(defaultGemState); updateTimestamp();
     };
 
     const startEdit = (gem) => {
@@ -269,7 +225,7 @@ export default function App() {
     const deleteGem = async (id) => {
         if(window.confirm("Permanently remove this item from your private vault?")) {
             const { error } = await supabase.from('gems').delete().eq('id', id);
-            if (error) return alert("Error deleting from cloud: " + error.message);
+            if (error) return alert("Error: " + error.message);
             setInventory(inventory.filter(g => g.id !== id));
             if (isEditing && editId === id) cancelEdit();
             updateTimestamp();
@@ -278,9 +234,7 @@ export default function App() {
 
     const requestSort = (key) => {
         let direction = 'ascending';
-        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-            direction = 'descending';
-        }
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') direction = 'descending';
         setSortConfig({ key, direction });
     };
 
@@ -291,7 +245,58 @@ export default function App() {
 
     const formPpc = safeNumber(newGem.weight) > 0 ? formatCurrency(safeNumber(newGem.price) / safeNumber(newGem.weight)) : '0.00';
 
-    // --- LOGIN SCREEN COMPONENT ---
+    // --- DIGITAL FILING CABINET (DETAILS VIEW) FUNCTIONS ---
+    const openGemDetails = async (gem) => {
+        setSelectedGem(gem);
+        setView('details');
+        setGemAssets([]); // Clear old assets while loading
+        // Fetch files connected to this gem
+        const { data, error } = await supabase.from('gem_assets').select('*').eq('gem_id', gem.id);
+        if (!error && data) {
+            setGemAssets(data);
+        }
+    };
+
+    const handleAssetUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file || !selectedGem) return;
+        setIsUploadingAsset(true);
+        
+        // 1. Upload to Supabase Storage
+        const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+        const { error: uploadError } = await supabase.storage.from('gem-photos').upload(fileName, file);
+        
+        if (uploadError) {
+            alert("Upload failed: " + uploadError.message);
+            setIsUploadingAsset(false);
+            return;
+        }
+
+        // 2. Get Public URL
+        const { data: publicUrlData } = supabase.storage.from('gem-photos').getPublicUrl(fileName);
+        
+        // 3. Save connection in the database
+        const newAsset = {
+            gem_id: selectedGem.id,
+            file_name: file.name,
+            file_url: publicUrlData.publicUrl
+        };
+
+        const { data, error } = await supabase.from('gem_assets').insert([newAsset]).select();
+        if (!error && data) {
+            setGemAssets([...gemAssets, data[0]]);
+        }
+        setIsUploadingAsset(false);
+    };
+
+    const deleteAsset = async (assetId) => {
+        if(window.confirm("Permanently delete this attached file?")) {
+            await supabase.from('gem_assets').delete().eq('id', assetId);
+            setGemAssets(gemAssets.filter(a => a.id !== assetId));
+        }
+    };
+
+    // --- RENDER LOGIN ---
     if (!session) {
         return (
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
@@ -305,11 +310,11 @@ export default function App() {
                         {authError && <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-lg text-center uppercase tracking-wider border border-red-200">{authError}</div>}
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email Address</label>
-                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm font-medium" placeholder="you@example.com" />
+                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-emerald-500 text-sm font-medium" placeholder="you@example.com" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Master Password</label>
-                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm font-medium" placeholder="••••••••" />
+                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-emerald-500 text-sm font-medium" placeholder="••••••••" />
                         </div>
                         <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-emerald-200 disabled:opacity-50">
                             {loadingAuth ? 'Unlocking...' : 'Unlock Vault'}
@@ -321,7 +326,7 @@ export default function App() {
         );
     }
 
-    // --- LABEL PRINTER VIEW ---
+    // --- RENDER LABEL ---
     const renderLabel = () => {
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${selectedGem.id}`;
         return (
@@ -362,7 +367,101 @@ export default function App() {
         );
     };
 
-    // --- MAIN VAULT VIEW ---
+    // --- RENDER DIGITAL FILING CABINET (DETAILS) ---
+    const renderGemDetails = () => {
+        if (!selectedGem) return null;
+        return (
+            <div className="max-w-5xl mx-auto p-6 space-y-6">
+                <button onClick={() => setView('list')} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold text-xs uppercase tracking-widest transition-colors mb-4">
+                    <IconBack /> Back to Main Vault
+                </button>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Left Column: Gem Summary Card */}
+                    <div className="md:col-span-1 space-y-6">
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div className="w-full aspect-square bg-slate-100 flex items-center justify-center relative">
+                                {selectedGem.image ? (
+                                    <img src={selectedGem.image} className="w-full h-full object-cover" alt={selectedGem.type} />
+                                ) : (
+                                    <IconCamera className="text-slate-300 w-12 h-12" />
+                                )}
+                                <div className="absolute top-2 right-2 bg-emerald-600 text-white text-xs font-black px-2 py-1 rounded shadow">
+                                    #{selectedGem.sheetNum || '-'}
+                                </div>
+                            </div>
+                            <div className="p-5 space-y-4">
+                                <div>
+                                    <h2 className="text-2xl font-black uppercase tracking-tight text-slate-800">{selectedGem.type}</h2>
+                                    <p className="text-xs font-mono text-slate-400 mt-1">{selectedGem.id}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-sm font-bold text-slate-700">{selectedGem.weight}ct <span className="text-slate-500 font-normal">{selectedGem.color}</span></p>
+                                    <p className="text-xs text-slate-500">{selectedGem.cut} • {selectedGem.clarity}</p>
+                                </div>
+                                <div className="pt-4 border-t border-slate-100">
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Sparkle Tokens</p>
+                                    <p className="text-2xl font-black text-emerald-600">${formatCurrency(selectedGem.price)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column: The Filing Cabinet */}
+                    <div className="md:col-span-2 space-y-6">
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                            <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 className="text-lg font-black uppercase text-slate-800 flex items-center gap-2">
+                                        <IconFolder /> Digital Filing Cabinet
+                                    </h3>
+                                    <p className="text-xs text-slate-500 mt-1">Upload valuations, certificates, and extra photos here.</p>
+                                </div>
+                                <div className="relative">
+                                    <label className="cursor-pointer bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-2">
+                                        {isUploadingAsset ? 'Uploading...' : <><IconUpload /> Add File</>}
+                                        <input type="file" className="hidden" onChange={handleAssetUpload} disabled={isUploadingAsset} />
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* File List */}
+                            <div className="space-y-3">
+                                {gemAssets.length === 0 && !isUploadingAsset && (
+                                    <div className="text-center p-8 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400 text-sm">
+                                        No files attached to this stone yet.
+                                    </div>
+                                )}
+                                
+                                {gemAssets.map(asset => (
+                                    <div key={asset.id} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 hover:shadow-sm transition-all group">
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <div className="bg-blue-50 text-blue-600 p-2 rounded-lg">
+                                                <IconFileText />
+                                            </div>
+                                            <a href={asset.file_url} target="_blank" rel="noreferrer" className="text-sm font-bold text-slate-700 hover:text-emerald-600 truncate">
+                                                {asset.file_name}
+                                            </a>
+                                        </div>
+                                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <a href={asset.file_url} download target="_blank" rel="noreferrer" title="Download File" className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg">
+                                                <IconDownload />
+                                            </a>
+                                            <button onClick={() => deleteAsset(asset.id)} title="Delete File" className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg">
+                                                <IconTrash />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    // --- RENDER MAIN INVENTORY ---
     const renderInventory = () => (
         <div className="max-w-[90rem] mx-auto p-6 space-y-8 no-print">
             <div className="flex flex-col md:flex-row justify-between gap-4 items-end">
@@ -378,7 +477,6 @@ export default function App() {
                 <div className="flex flex-wrap gap-3 items-center justify-end mt-4 md:mt-0">
                     <input type="file" accept=".csv" ref={fileInputRef} onChange={importCSV} className="hidden" />
                     
-                    {/* CLEAN MENU: ONLY IMPORT AND EXPORT CSV BUTTONS REMAIN */}
                     <button onClick={() => fileInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-indigo-700 bg-indigo-50 px-4 py-2 rounded-lg hover:bg-indigo-100 uppercase tracking-widest border border-indigo-200 transition-colors shadow-sm">
                         <IconUpload /> Import CSV
                     </button>
@@ -473,28 +571,6 @@ export default function App() {
                                 </div>
                             </div>
 
-                            <div className="space-y-3 pt-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-px bg-slate-200 flex-grow"></div>
-                                    <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Operational</span>
-                                    <div className="h-px bg-slate-200 flex-grow"></div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Vendor</label>
-                                        <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Dealer name..." value={newGem.vendor} onChange={e => setNewGem({...newGem, vendor: e.target.value})} />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Date Acquired</label>
-                                        <input type="date" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent text-slate-600" value={newGem.purchaseDate} onChange={e => setNewGem({...newGem, purchaseDate: e.target.value})} />
-                                    </div>
-                                </div>
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Storage Box</label>
-                                    <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Location" value={newGem.location} onChange={e => setNewGem({...newGem, location: e.target.value})} />
-                                </div>
-                            </div>
-
                             <div className="space-y-3 pt-2 bg-slate-100/50 p-2 rounded-xl border border-slate-100">
                                 <div className="flex items-center gap-2">
                                     <span className="text-[9px] uppercase font-bold text-emerald-600 tracking-widest ml-1">Financial Data</span>
@@ -517,7 +593,7 @@ export default function App() {
                             <div className="flex justify-center pt-2">
                                 <div className="relative group w-32 h-32">
                                     <div className={`w-full h-full rounded-xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-colors ${newGem.image ? 'border-emerald-200' : 'border-slate-300 hover:border-emerald-400 bg-white'}`}>
-                                        {newGem.image ? <img src={newGem.image} className="w-full h-full object-cover" /> : <div className="text-center p-2"><IconCamera /><p className="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-tighter">Attach</p></div>}
+                                        {newGem.image ? <img src={newGem.image} className="w-full h-full object-cover" /> : <div className="text-center p-2"><IconCamera /><p className="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-tighter">Attach Profile Pic</p></div>}
                                         <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
                                     </div>
                                     {newGem.image && <button type="button" onClick={() => setNewGem(p => ({...p, image: ''}))} className="absolute -top-2 -right-2 p-1 bg-white border border-slate-200 rounded-full text-red-500 hover:bg-red-50 shadow-sm transition-colors"><IconTrash /></button>}
@@ -569,11 +645,9 @@ export default function App() {
                                     let aVal = a[sortConfig.key] || 0;
                                     let bVal = b[sortConfig.key] || 0;
                                     if (['weight', 'price', 'sheetNum'].includes(sortConfig.key)) {
-                                        aVal = safeNumber(aVal);
-                                        bVal = safeNumber(bVal);
+                                        aVal = safeNumber(aVal); bVal = safeNumber(bVal);
                                     } else {
-                                        aVal = String(aVal).toLowerCase();
-                                        bVal = String(bVal).toLowerCase();
+                                        aVal = String(aVal).toLowerCase(); bVal = String(bVal).toLowerCase();
                                     }
                                     if (aVal < bVal) return sortConfig.direction === 'ascending' ? -1 : 1;
                                     if (aVal > bVal) return sortConfig.direction === 'ascending' ? 1 : -1;
@@ -621,6 +695,8 @@ export default function App() {
                                         <td className="p-4 text-right align-top">
                                             <div className="flex flex-col items-end gap-2">
                                                 <div className="flex gap-1">
+                                                    {/* NEW OPEN FOLDER BUTTON */}
+                                                    <button title="Open Digital Folder" onClick={() => openGemDetails(gem)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100"><IconFolder /></button>
                                                     <button title="Edit Gem" onClick={() => startEdit(gem)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-100"><IconEdit /></button>
                                                     <button title="Print Label" onClick={() => {setSelectedGem(gem); setView('label')}} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"><IconLabel /></button>
                                                 </div>
@@ -655,7 +731,12 @@ export default function App() {
                     </button>
                 </div>
             </nav>
-            {view === 'list' ? renderInventory() : renderLabel()}
+            
+            {/* VIEW ROUTER */}
+            {view === 'list' && renderInventory()}
+            {view === 'label' && renderLabel()}
+            {view === 'details' && renderGemDetails()}
+
             <footer className="p-8 text-center text-slate-300 text-[10px] uppercase tracking-[0.2em] no-print">&copy; Platypus Gems • Cloud Vault Encryption • Automated Database Sync</footer>
         </div>
     );
