@@ -53,7 +53,7 @@ const IconPlatypus = ({ className = "w-8 h-8" }) => (
         <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <circle cx="72" cy="42" r="2.5" fill="currentColor" />
-        <path d="M55 40L58 50L68 53L58 56L55 66L52 56L42 53L52 50L55 40Z" fill="#10b981" />
+        <path d="M55 40L58 50L68 53L58 56L55 66L52 56L42 53L52 50L55 40Z" fill="currentColor" />
     </svg>
 );
 const IconAsc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1 text-emerald-500 mb-0.5"><polyline points="18 15 12 9 6 15"></polyline></svg>;
@@ -132,9 +132,7 @@ export default function App() {
 
     const updateTimestamp = () => {
         const d = new Date();
-        const dateStr = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        setLastUpdated(`${dateStr} ${timeStr}`);
+        setLastUpdated(`${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
     };
 
     const handleImageUpload = async (e) => {
@@ -401,14 +399,14 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
                     <div className="p-8 text-center bg-slate-50 border-b border-slate-100">
-                        {/* PURPLE UV GLOW APPLIED HERE */}
-                        <div className="flex justify-center mb-4 text-emerald-600 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] relative">
-                            <IconPlatypus className="w-16 h-16 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+                        {/* SLEEK, ANTI-JOKER LOGO WITH SUBTLE PURPLE UV GLOW */}
+                        <div className="flex justify-center mb-4 text-slate-800 transition-colors duration-500 hover:text-purple-600 drop-shadow-[0_0_10px_rgba(168,85,247,0.3)] hover:drop-shadow-[0_0_20px_rgba(168,85,247,0.8)] cursor-default">
+                            <IconPlatypus className="w-16 h-16" />
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
                             Platypus Gems
                         </h1>
-                        <p className="text-xs font-bold uppercase tracking-widest text-emerald-600 mt-2">
+                        <p className="text-xs font-bold uppercase tracking-widest text-purple-600 mt-2 opacity-80">
                             Secure Vault Access
                         </p>
                     </div>
@@ -420,13 +418,13 @@ export default function App() {
                         ) : null}
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email Address</label>
-                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-emerald-500 text-sm font-medium" placeholder="you@example.com" />
+                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-sm font-medium transition-all" placeholder="you@example.com" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Master Password</label>
-                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-emerald-500 text-sm font-medium" placeholder="••••••••" />
+                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 border border-slate-200 rounded-xl outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-sm font-medium transition-all" placeholder="••••••••" />
                         </div>
-                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-emerald-200 disabled:opacity-50">
+                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 hover:bg-purple-700 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-purple-900/20 disabled:opacity-50">
                             {loadingAuth ? 'Unlocking...' : 'Unlock Vault'}
                         </button>
                     </form>
@@ -761,7 +759,7 @@ export default function App() {
                                     <textarea className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm h-16 bg-white" placeholder="Specific inclusions, client notes..." value={newGem.notes} onChange={e => setNewGem({...newGem, notes: e.target.value})} />
                                 </div>
 
-                                <button className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg active:scale-[0.98] text-white ${isEditing ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200' : 'bg-slate-900 hover:bg-black shadow-slate-300'}`}>
+                                <button className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg active:scale-[0.98] text-white ${isEditing ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200' : 'bg-slate-900 hover:bg-purple-700 shadow-slate-300 hover:shadow-purple-900/30'}`}>
                                     {isEditing ? 'Update Profile' : 'Save Registration'}
                                 </button>
                             </form>
@@ -857,7 +855,7 @@ export default function App() {
                                             <td className="p-4 text-right align-top">
                                                 <div className="flex flex-col items-end gap-2">
                                                     <div className="flex gap-1">
-                                                        <button title="Open Digital Folder" onClick={() => openGemDetails(gem)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100"><IconFolder /></button>
+                                                        <button title="Open Digital Folder" onClick={() => openGemDetails(gem)} className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors border border-transparent hover:border-purple-100"><IconFolder /></button>
                                                         <button title="Edit Gem" onClick={() => startEdit(gem)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-100"><IconEdit /></button>
                                                         <button title="Print Label" onClick={() => {setSelectedGem(gem); setView('label')}} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"><IconLabel /></button>
                                                     </div>
@@ -883,15 +881,15 @@ export default function App() {
         <div className="min-h-screen bg-slate-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
-                    {/* PURPLE UV GLOW APPLIED HERE */}
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-[0_0_15px_rgba(168,85,247,0.5)] border border-purple-500/30 logo-hover transition-all duration-500 relative">
-                        <IconPlatypus className="w-10 h-10 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+                    {/* PURPLE UV GLOW & HOVER COLOR CHANGE APPLIED HERE */}
+                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 border border-purple-500/20 transition-all duration-500 relative group-hover:text-purple-500 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.7)] group-hover:border-purple-500/60">
+                        <IconPlatypus className="w-10 h-10 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)] group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.9)] transition-all duration-500" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-black text-2xl italic tracking-tighter uppercase leading-none">
                             PLATYPUS GEMS
                         </span>
-                        <span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70">
+                        <span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70 transition-colors duration-500 group-hover:text-purple-400">
                             Privé Inventory Vault
                         </span>
                     </div>
