@@ -47,10 +47,16 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-// Restored to the ORIGINAL opacity style you liked. 
-// Changed the star's fill from the hardcoded hex green to "currentColor" so it perfectly transitions to purple!
-const IconPlatypus = ({ className = "w-8 h-8" }) => (
+// PERFECTED PLATYPUS: Contains a solid 'blocker' layer to stop internal glow bleeding!
+const IconPlatypus = ({ className = "w-8 h-8", blockerColor = "transparent" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* BLOCKER LAYER: Solid shape that matches background, blocking all drop-shadow light from bleeding through */}
+        <g fill={blockerColor}>
+            <path d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" />
+            <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45Z" />
+            <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59Z" />
+        </g>
+        {/* ORIGINAL ARTWORK LAYER */}
         <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
         <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
@@ -245,7 +251,7 @@ export default function App() {
                     else if (h === 'cut') gem.cut = v;
                     else if (h === 'clarity') gem.clarity = v;
                     else if (h.includes('carats') || h.includes('weight')) gem.weight = v;
-                    else if (h.includes('length')) gem.dimL = v;
+                    else if (h.includes('length')) facility.dimL = v;
                     else if (h.includes('width')) gem.dimW = v;
                     else if (h.includes('depth')) gem.dimD = v;
                     else if (h.includes('treatment')) gem.treatment = v;
@@ -400,11 +406,19 @@ export default function App() {
         return (
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
-                    <div className="p-8 text-center bg-emerald-100/40 border-b border-emerald-200/50">
-                        {/* THE REAL GLOW FIX */}
-                        {/* We are using the exact drop-shadow values you approved of originally */}
-                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-600 cursor-default">
-                            <IconPlatypus className="w-32 h-32 drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_40px_rgba(168,85,247,1)] transition-all duration-500" />
+                    <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
+                        
+                        {/* THE ULTIMATE LOCK SCREEN PLATYPUS
+                            1. blockerColor="#ecfdf5" explicitly blocks light passing through the center!
+                            2. text-emerald-500 transitions to text-purple-800 (Dark Royal Purple) on hover!
+                            3. Intense outer-glow logic applied to drop-shadows.
+                        */}
+                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-800 cursor-default">
+                            <div className="drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_50px_rgba(168,85,247,1)] transition-all duration-500">
+                                <div className="group-hover:drop-shadow-[0_0_20px_rgba(168,85,247,0.9)] transition-all duration-500">
+                                    <IconPlatypus className="w-32 h-32" blockerColor="#ecfdf5" />
+                                </div>
+                            </div>
                         </div>
 
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
@@ -428,7 +442,6 @@ export default function App() {
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Master Password</label>
                             <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 bg-white/70 border border-emerald-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm font-medium transition-all" placeholder="••••••••" />
                         </div>
-                        {/* UNLOCK BUTTON WITH MASSIVE UV GLOW AND PURPLE TEXT ON HOVER */}
                         <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 text-white hover:text-purple-400 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-md hover:shadow-[0_0_35px_rgba(168,85,247,1)] border border-transparent hover:border-purple-500/50 disabled:opacity-50">
                             {loadingAuth ? 'Unlocking...' : 'Unlock Vault'}
                         </button>
@@ -887,10 +900,11 @@ export default function App() {
         <div className="min-h-screen bg-emerald-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
-                    {/* ORIGINAL PLATYPUS WITH THE EXACT GLOW YOU LIKED */}
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 border border-purple-500/40 transition-all duration-500 relative group-hover:text-purple-600 group-hover:border-purple-500/80">
-                        <div className="drop-shadow-[0_0_8px_rgba(168,85,247,0.4)] group-hover:drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] transition-all duration-500">
-                            <IconPlatypus className="w-10 h-10" />
+                    {/* THE ULTIMATE NAV PLATYPUS */}
+                    {/* blockerColor="#0f172a" completely stops the bleed. Dark purple (text-purple-800) on hover. */}
+                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 border border-purple-500/40 transition-all duration-500 relative group-hover:text-purple-800 group-hover:border-purple-500/80">
+                        <div className="drop-shadow-[0_0_12px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_30px_rgba(168,85,247,1)] transition-all duration-500">
+                            <IconPlatypus className="w-10 h-10" blockerColor="#0f172a" />
                         </div>
                     </div>
                     <div className="flex flex-col">
