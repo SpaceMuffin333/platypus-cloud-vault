@@ -554,9 +554,9 @@ export default function App() {
 
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2">
-                                        <div className="h-px bg-slate-200 flex-grow"></div>
+                                        <hr className="flex-grow border-slate-200" />
                                         <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">General</span>
-                                        <div className="h-px bg-slate-200 flex-grow"></div>
+                                        <hr className="flex-grow border-slate-200" />
                                     </div>
                                     <div className="grid grid-cols-3 gap-3">
                                         <div className="col-span-1 space-y-1">
@@ -594,9 +594,9 @@ export default function App() {
 
                                 <div className="space-y-3 pt-2">
                                     <div className="flex items-center gap-2">
-                                        <div className="h-px bg-slate-200 flex-grow"></div>
+                                        <hr className="flex-grow border-slate-200" />
                                         <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Gemological</span>
-                                        <div className="h-px bg-slate-200 flex-grow"></div>
+                                        <hr className="flex-grow border-slate-200" />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="space-y-1">
@@ -620,6 +620,201 @@ export default function App() {
 
                                 <div className="space-y-3 pt-2">
                                     <div className="flex items-center gap-2">
-                                        <div className="h-px bg-slate-200 flex-grow"></div>
+                                        <hr className="flex-grow border-slate-200" />
                                         <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Operational</span>
-                                        <div className="h-px bg-slate-200 flex-grow">
+                                        <hr className="flex-grow border-slate-200" />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Vendor</label>
+                                            <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Dealer name..." value={newGem.vendor} onChange={e => setNewGem({...newGem, vendor: e.target.value})} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Date Acquired</label>
+                                            <input type="date" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent text-slate-600" value={newGem.purchaseDate} onChange={e => setNewGem({...newGem, purchaseDate: e.target.value})} />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Storage Box</label>
+                                        <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Location" value={newGem.location} onChange={e => setNewGem({...newGem, location: e.target.value})} />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3 pt-2 bg-slate-100/50 p-2 rounded-xl border border-slate-100">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[9px] uppercase font-bold text-emerald-600 tracking-widest ml-1">Financial Data</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Cost $</label>
+                                            <input type="number" step="0.01" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-white" placeholder="0.00" value={newGem.cost} onChange={e => setNewGem({...newGem, cost: e.target.value})} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Retail Val $</label>
+                                            <input type="number" step="0.01" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-white font-bold text-emerald-700" placeholder="0.00" value={newGem.price} onChange={e => setNewGem({...newGem, price: e.target.value})} />
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-white px-2 py-1 rounded border border-slate-200 shadow-sm">Calc $/ct: ${formPpc}</span>
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-center pt-2">
+                                    <div className="relative group w-32 h-32">
+                                        <div className={`w-full h-full rounded-xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-colors ${newGem.image ? 'border-emerald-200' : 'border-slate-300 hover:border-emerald-400 bg-white'}`}>
+                                            {newGem.image ? (
+                                                <img src={newGem.image} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="text-center p-2"><IconCamera /><p className="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-tighter">Attach Profile Pic</p></div>
+                                            )}
+                                            <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                        </div>
+                                        {newGem.image ? (
+                                            <button type="button" onClick={() => setNewGem(p => ({...p, image: ''}))} className="absolute -top-2 -right-2 p-1 bg-white border border-slate-200 rounded-full text-red-500 hover:bg-red-50 shadow-sm transition-colors"><IconTrash /></button>
+                                        ) : null}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Private Notes</label>
+                                    <textarea className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm h-16 bg-white" placeholder="Specific inclusions, client notes..." value={newGem.notes} onChange={e => setNewGem({...newGem, notes: e.target.value})} />
+                                </div>
+
+                                <button className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg active:scale-[0.98] text-white ${isEditing ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200' : 'bg-slate-900 hover:bg-black shadow-slate-300'}`}>
+                                    {isEditing ? 'Update Profile' : 'Save Registration'}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div className="lg:col-span-8 lg:col-span-9 xl:col-span-9">
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-slate-50 border-b text-slate-500 font-bold uppercase text-[10px] tracking-widest">
+                                    <tr>
+                                        <th className="p-4 w-16 sort-header rounded-tl-2xl" onClick={() => requestSort('sheetNum')} title="Sort by Reference Number">
+                                            #{renderSortIcon('sheetNum')}
+                                        </th>
+                                        <th className="p-4">Variety</th>
+                                        <th className="p-4 sort-header" onClick={() => requestSort('weight')} title="Sort by Carat Weight">
+                                            Profile & Specs{renderSortIcon('weight')}
+                                        </th>
+                                        <th className="p-4 sort-header" onClick={() => requestSort('price')} title="Sort by Market Value">
+                                            Sparkle Tokens{renderSortIcon('price')}
+                                        </th>
+                                        <th className="p-4">Logistics</th>
+                                        <th className="p-4 text-right rounded-tr-2xl">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {inventory.filter(i => {
+                                        const search = searchTerm.toLowerCase();
+                                        return (
+                                            String(i.type||'').toLowerCase().includes(search) || 
+                                            String(i.id||'').toLowerCase().includes(search) ||
+                                            String(i.color||'').toLowerCase().includes(search) ||
+                                            String(i.origin||'').toLowerCase().includes(search) ||
+                                            String(i.sheetNum||'').toLowerCase().includes(search)
+                                        );
+                                    }).sort((a, b) => {
+                                        let aVal = a[sortConfig.key] || 0;
+                                        let bVal = b[sortConfig.key] || 0;
+                                        if (['weight', 'price', 'sheetNum'].includes(sortConfig.key)) {
+                                            aVal = safeNumber(aVal); bVal = safeNumber(bVal);
+                                        } else {
+                                            aVal = String(aVal).toLowerCase(); bVal = String(bVal).toLowerCase();
+                                        }
+                                        if (aVal < bVal) return sortConfig.direction === 'ascending' ? -1 : 1;
+                                        if (aVal > bVal) return sortConfig.direction === 'ascending' ? 1 : -1;
+                                        return 0;
+                                    }).map(gem => {
+                                        const ppcRow = safeNumber(gem.weight) > 0 ? formatCurrency(safeNumber(gem.price) / safeNumber(gem.weight)) : '0.00';
+                                        return (
+                                        <tr key={gem.id} className={`transition-colors ${editId === gem.id ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
+                                            <td className="p-4 align-top">
+                                                <div className="w-8 h-8 rounded bg-emerald-600 text-white flex items-center justify-center font-black text-xs shadow-sm">{gem.sheetNum || '-'}</div>
+                                            </td>
+                                            <td className="p-4 align-top">
+                                                <div className="flex gap-4">
+                                                    <div className="w-14 h-14 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 shadow-sm">
+                                                        {gem.image ? <img src={gem.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-300"><IconCamera /></div>}
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-black text-slate-800 uppercase tracking-tight text-[15px]">{gem.type}</div>
+                                                        <div className="text-[10px] font-mono text-slate-400 bg-white px-1 border border-slate-100 rounded inline-block mt-1">{gem.id}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="p-4 align-top">
+                                                <div className="text-slate-800 font-bold text-sm mb-1">{gem.weight}ct <span className="text-slate-400 font-normal ml-1">{gem.color}</span></div>
+                                                <div className="text-[11px] text-slate-500 mb-2">
+                                                    <span className="bg-slate-100 px-1 rounded">{gem.cut || 'Uncut'}</span>
+                                                    {gem.dimL && gem.dimW ? (<span className="ml-2 text-slate-400">{gem.dimL}x{gem.dimW}{gem.dimD ? `x${gem.dimD}` : ''}mm</span>) : null}
+                                                </div>
+                                                <div className="text-[10px] text-slate-400 grid grid-cols-2 gap-x-2 gap-y-1">
+                                                    <div><span className="font-bold uppercase">Org:</span> {gem.origin || '-'}</div>
+                                                    <div><span className="font-bold uppercase">Trt:</span> {gem.treatment || '-'}</div>
+                                                    <div><span className="font-bold uppercase">Clr:</span> {gem.clarity || '-'}</div>
+                                                    <div><span className="font-bold uppercase">Crt:</span> {gem.certificate || '-'}</div>
+                                                </div>
+                                            </td>
+                                            <td className="p-4 align-top">
+                                                <div className="text-emerald-700 font-black text-lg">${formatCurrency(gem.price)}</div>
+                                                <div className="text-[11px] text-slate-500 font-medium mt-1">Cost: ${formatCurrency(gem.cost)}</div>
+                                                <div className="text-[10px] text-slate-400 uppercase tracking-tighter mt-2 border-t border-slate-100 pt-1">Rate: ${ppcRow}/ct</div>
+                                            </td>
+                                            <td className="p-4 align-top">
+                                                <div className="mb-2"><span className="px-2 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-md text-[10px] font-bold uppercase tracking-wider">{gem.location || 'Vault'}</span></div>
+                                                <div className="text-[10px] text-slate-500"><div className="truncate w-24" title={gem.vendor}>Vnd: {gem.vendor || '-'}</div><div>Dt: {gem.purchaseDate || '-'}</div></div>
+                                            </td>
+                                            <td className="p-4 text-right align-top">
+                                                <div className="flex flex-col items-end gap-2">
+                                                    <div className="flex gap-1">
+                                                        <button title="Open Digital Folder" onClick={() => openGemDetails(gem)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100"><IconFolder /></button>
+                                                        <button title="Edit Gem" onClick={() => startEdit(gem)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-100"><IconEdit /></button>
+                                                        <button title="Print Label" onClick={() => {setSelectedGem(gem); setView('label')}} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"><IconLabel /></button>
+                                                    </div>
+                                                    <button title="Delete" onClick={() => deleteGem(gem.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><IconTrash /></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        );
+                                    })}
+                                    {inventory.length === 0 ? (
+                                        <tr><td colSpan="6" className="p-20 text-center text-slate-400 italic font-medium">No stones found. Awaiting initial registration.</td></tr>
+                                    ) : null}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <div className="min-h-screen bg-slate-50 font-sans">
+            <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
+                <div className="flex items-center gap-4 group cursor-default">
+                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-inner border border-emerald-500/20 logo-hover transition-all duration-500"><IconPlatypus className="w-10 h-10" /></div>
+                    <div className="flex flex-col"><span className="font-black text-2xl italic tracking-tighter uppercase leading-none">PLATYPUS GEMS</span><span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70">Privé Inventory Vault</span></div>
+                </div>
+                <div className="flex items-center gap-6">
+                    <div className="hidden md:block text-right"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Vault Sync State</p><p className="text-xs font-mono text-emerald-400 uppercase tracking-tighter">Ready • {lastUpdated}</p></div>
+                    <div className="bg-emerald-500/10 text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-bold border border-emerald-500/20 tracking-widest uppercase flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>Secure Mode
+                    </div>
+                    <button onClick={handleLogOut} className="flex items-center gap-2 text-[10px] font-bold text-slate-300 hover:text-white uppercase tracking-widest transition-colors border-l border-slate-700 pl-6 ml-2">
+                        <IconLogOut /> Exit Vault
+                    </button>
+                </div>
+            </nav>
+            
+            {view === 'list' ? renderInventory() : null}
+            {view === 'label' ? renderLabel() : null}
+            {view === 'details' ? renderGemDetails() : null}
+
+            <footer className="p-8 text-center text-slate-300 text-[10px] uppercase tracking-[0.2em] no-print">&copy; Platypus Gems • Cloud Vault Encryption • Automated Database Sync</footer>
+        </div>
+    );
+}
