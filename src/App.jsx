@@ -15,6 +15,12 @@ const formatCurrency = (value) => {
     return safeNumber(value).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
+// Smart Thumbnail Detector
+const isImage = (fileName) => {
+    if (!fileName) return false;
+    return fileName.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null;
+};
+
 const GEM_DATA = {
     varieties: ["Diamond", "Sapphire", "Ruby", "Emerald", "Alexandrite", "Amethyst", "Aquamarine", "Citrine", "Garnet", "Morganite", "Opal", "Peridot", "Spinel", "Tanzanite", "Topaz", "Tourmaline", "Zircon"],
     cuts: ["Round Brilliant", "Oval", "Cushion", "Emerald Cut", "Princess", "Pear", "Marquise", "Radiant", "Asscher", "Heart", "Baguette", "Trillion", "Cabochon"],
@@ -58,7 +64,7 @@ export default function App() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'sheetNum', direction: 'ascending' }); 
     
-    const [view, setView] = useState('list'); // 'list', 'label', or 'details'
+    const [view, setView] = useState('list'); 
     const [selectedGem, setSelectedGem] = useState(null);
     const [gemAssets, setGemAssets] = useState([]);
     const [isUploadingAsset, setIsUploadingAsset] = useState(false);
@@ -69,14 +75,12 @@ export default function App() {
 
     const fileInputRef = useRef(null);
 
-    // --- INITIALIZE AUTH ---
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
         return () => subscription.unsubscribe();
     }, []);
 
-    // --- FETCH INVENTORY ---
     useEffect(() => {
         if (!session) return;
         const fetchGems = async () => {
@@ -249,8 +253,7 @@ export default function App() {
     const openGemDetails = async (gem) => {
         setSelectedGem(gem);
         setView('details');
-        setGemAssets([]); // Clear old assets while loading
-        // Fetch files connected to this gem
+        setGemAssets([]); 
         const { data, error } = await supabase.from('gem_assets').select('*').eq('gem_id', gem.id);
         if (!error && data) {
             setGemAssets(data);
@@ -262,7 +265,6 @@ export default function App() {
         if (!file || !selectedGem) return;
         setIsUploadingAsset(true);
         
-        // 1. Upload to Supabase Storage
         const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
         const { error: uploadError } = await supabase.storage.from('gem-photos').upload(fileName, file);
         
@@ -272,10 +274,8 @@ export default function App() {
             return;
         }
 
-        // 2. Get Public URL
         const { data: publicUrlData } = supabase.storage.from('gem-photos').getPublicUrl(fileName);
         
-        // 3. Save connection in the database
         const newAsset = {
             gem_id: selectedGem.id,
             file_name: file.name,
@@ -377,7 +377,6 @@ export default function App() {
                 </button>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Left Column: Gem Summary Card */}
                     <div className="md:col-span-1 space-y-6">
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                             <div className="w-full aspect-square bg-slate-100 flex items-center justify-center relative">
@@ -407,7 +406,6 @@ export default function App() {
                         </div>
                     </div>
 
-                    {/* Right Column: The Filing Cabinet */}
                     <div className="md:col-span-2 space-y-6">
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                             <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
@@ -425,7 +423,6 @@ export default function App() {
                                 </div>
                             </div>
 
-                            {/* File List */}
                             <div className="space-y-3">
                                 {gemAssets.length === 0 && !isUploadingAsset && (
                                     <div className="text-center p-8 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400 text-sm">
@@ -436,9 +433,16 @@ export default function App() {
                                 {gemAssets.map(asset => (
                                     <div key={asset.id} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 hover:shadow-sm transition-all group">
                                         <div className="flex items-center gap-3 overflow-hidden">
-                                            <div className="bg-blue-50 text-blue-600 p-2 rounded-lg">
-                                                <IconFileText />
-                                            </div>
+                                            {/* THUMBNAIL DETECTOR LOGIC */}
+                                            {isImage(asset.file_name) ? (
+                                                <div className="w-10 h-10 rounded bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-200">
+                                                    <img src={asset.file_url} alt="preview" className="w-full h-full object-cover" />
+                                                </div>
+                                            ) : (
+                                                <div className="bg-blue-50 text-blue-600 p-2 rounded-lg flex-shrink-0">
+                                                    <IconFileText />
+                                                </div>
+                                            )}
                                             <a href={asset.file_url} target="_blank" rel="noreferrer" className="text-sm font-bold text-slate-700 hover:text-emerald-600 truncate">
                                                 {asset.file_name}
                                             </a>
@@ -571,6 +575,28 @@ export default function App() {
                                 </div>
                             </div>
 
+                            <div className="space-y-3 pt-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="h-px bg-slate-200 flex-grow"></div>
+                                    <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Operational</span>
+                                    <div className="h-px bg-slate-200 flex-grow"></div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Vendor</label>
+                                        <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Dealer name..." value={newGem.vendor} onChange={e => setNewGem({...newGem, vendor: e.target.value})} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase">Date Acquired</label>
+                                        <input type="date" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent text-slate-600" value={newGem.purchaseDate} onChange={e => setNewGem({...newGem, purchaseDate: e.target.value})} />
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Storage Box</label>
+                                    <input className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Location" value={newGem.location} onChange={e => setNewGem({...newGem, location: e.target.value})} />
+                                </div>
+                            </div>
+
                             <div className="space-y-3 pt-2 bg-slate-100/50 p-2 rounded-xl border border-slate-100">
                                 <div className="flex items-center gap-2">
                                     <span className="text-[9px] uppercase font-bold text-emerald-600 tracking-widest ml-1">Financial Data</span>
@@ -695,7 +721,6 @@ export default function App() {
                                         <td className="p-4 text-right align-top">
                                             <div className="flex flex-col items-end gap-2">
                                                 <div className="flex gap-1">
-                                                    {/* NEW OPEN FOLDER BUTTON */}
                                                     <button title="Open Digital Folder" onClick={() => openGemDetails(gem)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors border border-transparent hover:border-indigo-100"><IconFolder /></button>
                                                     <button title="Edit Gem" onClick={() => startEdit(gem)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors border border-transparent hover:border-emerald-100"><IconEdit /></button>
                                                     <button title="Print Label" onClick={() => {setSelectedGem(gem); setView('label')}} className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-transparent hover:border-blue-100"><IconLabel /></button>
@@ -705,39 +730,4 @@ export default function App() {
                                         </td>
                                     </tr>
                                 )})}
-                                {inventory.length === 0 && <tr><td colSpan="6" className="p-20 text-center text-slate-400 italic font-medium">No stones found. Awaiting initial registration.</td></tr>}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-
-    return (
-        <div className="min-h-screen bg-slate-50 font-sans">
-            <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
-                <div className="flex items-center gap-4 group cursor-default">
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-inner border border-emerald-500/20 logo-hover transition-all duration-500"><IconPlatypus className="w-10 h-10" /></div>
-                    <div className="flex flex-col"><span className="font-black text-2xl italic tracking-tighter uppercase leading-none">PLATYPUS GEMS</span><span className="text-[9px] font-bold text-emerald-500 tracking-[0.3em] uppercase opacity-70">Privé Inventory Vault</span></div>
-                </div>
-                <div className="flex items-center gap-6">
-                    <div className="hidden md:block text-right"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Vault Sync State</p><p className="text-xs font-mono text-emerald-400 uppercase tracking-tighter">Ready • {lastUpdated}</p></div>
-                    <div className="bg-emerald-500/10 text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-bold border border-emerald-500/20 tracking-widest uppercase flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>Secure Mode
-                    </div>
-                    <button onClick={handleLogOut} className="flex items-center gap-2 text-[10px] font-bold text-slate-300 hover:text-white uppercase tracking-widest transition-colors border-l border-slate-700 pl-6 ml-2">
-                        <IconLogOut /> Exit Vault
-                    </button>
-                </div>
-            </nav>
-            
-            {/* VIEW ROUTER */}
-            {view === 'list' && renderInventory()}
-            {view === 'label' && renderLabel()}
-            {view === 'details' && renderGemDetails()}
-
-            <footer className="p-8 text-center text-slate-300 text-[10px] uppercase tracking-[0.2em] no-print">&copy; Platypus Gems • Cloud Vault Encryption • Automated Database Sync</footer>
-        </div>
-    );
-}
+                                {inventory.length === 0 && <tr>
