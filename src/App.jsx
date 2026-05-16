@@ -400,8 +400,8 @@ export default function App() {
                 {/* SOFT GREEN BACKGROUND INSTEAD OF LAVENDER */}
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-100/40 border-b border-emerald-200/50">
-                        {/* DOUBLE SIZED PLATYPUS, EMERALD -> VIBRANT PURPLE GLOW ON HOVER */}
-                        <div className="flex justify-center mb-6 text-emerald-500 transition-all duration-500 hover:text-purple-600 hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.9)] cursor-default">
+                        {/* DOUBLE SIZED PLATYPUS, BASE UV GLOW, VIBRANT PURPLE GLOW ON HOVER */}
+                        <div className="flex justify-center mb-6 text-emerald-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-500 hover:text-purple-500 hover:drop-shadow-[0_0_40px_rgba(168,85,247,1)] cursor-default">
                             <IconPlatypus className="w-32 h-32" />
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
@@ -425,8 +425,8 @@ export default function App() {
                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Master Password</label>
                             <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 bg-white/70 border border-emerald-200 rounded-xl outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm font-medium transition-all" placeholder="••••••••" />
                         </div>
-                        {/* UNLOCK BUTTON WITH UV GLOW AND PURPLE TEXT ON HOVER */}
-                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 text-white hover:text-purple-400 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-md hover:shadow-[0_0_30px_rgba(168,85,247,1)] border border-transparent hover:border-purple-500/50 disabled:opacity-50">
+                        {/* UNLOCK BUTTON WITH MASSIVE UV GLOW AND PURPLE TEXT ON HOVER */}
+                        <button type="submit" disabled={loadingAuth} className="w-full py-4 bg-slate-900 text-white hover:text-purple-400 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-md hover:shadow-[0_0_35px_rgba(168,85,247,1)] border border-transparent hover:border-purple-500/50 disabled:opacity-50">
                             {loadingAuth ? 'Unlocking...' : 'Unlock Vault'}
                         </button>
                     </form>
@@ -881,7 +881,8 @@ export default function App() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans">
+        // --- SOFT GREEN INVENTORY BACKGROUND APPLIED HERE ---
+        <div className="min-h-screen bg-emerald-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
                     {/* PURPLE UV GLOW & HOVER COLOR CHANGE APPLIED HERE */}
