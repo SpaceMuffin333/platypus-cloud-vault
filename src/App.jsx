@@ -47,7 +47,7 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-// PURE ORIGINAL LOGO. No hacks. Star naturally changes color with the rest of the body.
+// HARD LOCKED: Original Logo.
 const IconPlatypus = ({ className = "w-8 h-8" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
@@ -405,13 +405,19 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        {/* LOCK SCREEN HARD LOCK:
-                            - Intense drop-shadow glow on main green platypus
-                            - More intense drop-shadow glow on hover
-                            - Platypus changes to darker purple on hover
+                        {/* THE LOCK SCREEN FIX: 
+                            - Nested divs separate the color transition from the drop-shadow filter. 
+                            - Outer div handles text-color transition to dark purple (purple-800).
+                            - Inner divs provide stacked, intense solid hex (#a855f7) drop-shadows that explode on hover.
                         */}
-                        <div className="group mx-auto w-max mb-6 text-emerald-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.8)] transition-all duration-500 hover:text-purple-800 hover:drop-shadow-[0_0_50px_rgba(168,85,247,1)] cursor-default">
-                            <IconPlatypus className="w-32 h-32 transition-all duration-500" />
+                        <div className="group mx-auto w-max mb-6 cursor-default">
+                            <div className="text-emerald-500 transition-colors duration-500 group-hover:text-purple-800">
+                                <div className="transition-all duration-500 drop-shadow-[0_0_20px_#a855f7] group-hover:drop-shadow-[0_0_60px_#a855f7]">
+                                    <div className="transition-all duration-500 drop-shadow-[0_0_10px_#a855f7] group-hover:drop-shadow-[0_0_30px_#a855f7]">
+                                        <IconPlatypus className="w-32 h-32" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
                             Platypus Gems
