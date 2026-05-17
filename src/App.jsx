@@ -407,10 +407,6 @@ export default function App() {
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
                         
-                        {/* THE FIX: We inject a hard CSS override that turns the background duplicate 
-                            into a 100% solid brick that matches the background color (#ecfdf5). 
-                            This guarantees the drop-shadow ONLY originates from the outer bounds, 
-                            with absolutely zero leakage through the middle. */}
                         <style>{`
                             .silhouette-mask path, .silhouette-mask circle {
                                 fill: #ecfdf5 !important;
@@ -429,7 +425,7 @@ export default function App() {
                             </div>
 
                             {/* FOREGROUND LAYER */}
-                            <div className="relative z-10 text-emerald-500 transition-colors duration-500 group-hover:text-purple-800">
+                            <div className="relative z-10 text-emerald-700 transition-colors duration-500 group-hover:text-purple-800">
                                 <IconPlatypus className="w-32 h-32" />
                             </div>
                         </div>
