@@ -47,7 +47,7 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-// RESTORED PURE SVG: No blocker hacks. Star uses currentColor to transition flawlessly.
+// PURE ORIGINAL LOGO. No hacks. Star naturally changes color with the rest of the body.
 const IconPlatypus = ({ className = "w-8 h-8" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
@@ -405,9 +405,12 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        {/* THE LOCK SCREEN LOGO - RESTORED EXACTLY FROM "2 VERSIONS AGO" */}
-                        {/* Base UV Drop-Shadow, intense UV Drop-Shadow on Hover, Dark Purple text transition on hover */}
-                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-800 cursor-default drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] hover:drop-shadow-[0_0_40px_rgba(168,85,247,1)]">
+                        {/* LOCK SCREEN HARD LOCK:
+                            - Intense drop-shadow glow on main green platypus
+                            - More intense drop-shadow glow on hover
+                            - Platypus changes to darker purple on hover
+                        */}
+                        <div className="group mx-auto w-max mb-6 text-emerald-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.8)] transition-all duration-500 hover:text-purple-800 hover:drop-shadow-[0_0_50px_rgba(168,85,247,1)] cursor-default">
                             <IconPlatypus className="w-32 h-32 transition-all duration-500" />
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
@@ -560,6 +563,7 @@ export default function App() {
                                 {gemAssets.map(asset => (
                                     <div key={asset.id} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 hover:shadow-sm transition-all group">
                                         <div className="flex items-center gap-3 overflow-hidden">
+                                            {/* THUMBNAIL DETECTOR LOGIC */}
                                             {isImage(asset.file_name) ? (
                                                 <div className="w-10 h-10 rounded bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-200">
                                                     <img src={asset.file_url} alt="preview" className="w-full h-full object-cover" />
@@ -900,11 +904,9 @@ export default function App() {
         <div className="min-h-screen bg-emerald-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
-                    {/* HARD LOCKED: The exact 'good job' Nav Bar code block */}
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 border border-purple-500/40 transition-all duration-500 relative group-hover:text-purple-800 group-hover:border-purple-500/80">
-                        <div className="drop-shadow-[0_0_12px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_30px_rgba(168,85,247,1)] transition-all duration-500">
-                            <IconPlatypus className="w-10 h-10" />
-                        </div>
+                    {/* NAV BAR HARD LOCK: Glow on square container using box-shadow */}
+                    <div className="p-1.5 rounded-xl text-emerald-400 bg-emerald-500/10 border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.6)] group-hover:shadow-[0_0_25px_rgba(168,85,247,0.9)] transition-all duration-500 relative group-hover:text-purple-500 group-hover:border-purple-500/60">
+                        <IconPlatypus className="w-10 h-10 transition-all duration-500" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-black text-2xl italic tracking-tighter uppercase leading-none">
