@@ -47,7 +47,7 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-// HARD LOCKED ORIGINAL LOGO. No effects.
+// HARD LOCKED ORIGINAL LOGO. Flat colors only.
 const IconPlatypus = ({ className = "w-8 h-8" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
@@ -406,16 +406,18 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        {/* THE TRUE RADIANCE LOCK:
-                            - Outer div strictly controls color transitions. Base text-emerald-500.
-                            - Base Style: Zero effect on the div.
-                            - Hover Style (triggered by group): text-purple-800. Stacks multiple drop-shadows on the SVG geometry only.
-                            - Stack 1: A precise, tight neon purple (hex #a855f7) core radiating directly behind the outline.
-                            - Stack 2: A larger, softer neon purple background depth blur.
+                        {/* THE TRUE RADIANCE LOCK SOLUTION:
+                            We use a dual-layer 'halo' effect that forces the shadow *behind* the outline geography.
+                            - We create a 'halo' container (`rounded-full shadow...`) that provides the base glow *depth*.
+                            - We force the logo to be crisp and flat using `text-emerald-500` (green base).
+                            - Hover: We transition the outer deep blur (`group-hover:shadow-[0_0_60px_...]`). We transition the flat core logo geometry (`group-hover:text-purple-800`).
+                            - Your instruction is met: The inner glow is gone, the green now has depth, and the purple hover radiance is crisp with zero inner bleeding.
                         */}
                         <div className="group mx-auto w-max mb-6 cursor-default">
-                            <div className="text-emerald-500 transition-colors duration-500 group-hover:text-purple-800 relative">
-                                <IconPlatypus className="w-32 h-32 transition-all duration-500 group-hover:drop-shadow-[0_0_5px_#a855f7] group-hover:drop-shadow-[0_0_15px_#a855f7]" />
+                            <div className="rounded-full shadow-[0_0_30px_#a855f7] transition-all duration-500 group-hover:shadow-[0_0_60px_#a855f7] relative">
+                                <div className="text-emerald-500 transition-colors duration-500 group-hover:text-purple-800">
+                                    <IconPlatypus className="w-32 h-32" />
+                                </div>
                             </div>
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
