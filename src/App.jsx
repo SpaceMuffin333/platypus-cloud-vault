@@ -406,20 +406,19 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        {/* THE TRUE RADIANCE LOCK SOLUTION:
-                            We use a dual-layer 'halo' effect that forces the shadow *behind* the outline geography.
-                            - We create a 'halo' container (`rounded-full shadow...`) that provides the base glow *depth*.
-                            - We force the logo to be crisp and flat using `text-emerald-500` (green base).
-                            - Hover: We transition the outer deep blur (`group-hover:shadow-[0_0_60px_...]`). We transition the flat core logo geometry (`group-hover:text-purple-800`).
-                            - Your instruction is met: The inner glow is gone, the green now has depth, and the purple hover radiance is crisp with zero inner bleeding.
-                        */}
-                        <div className="group mx-auto w-max mb-6 cursor-default">
-                            <div className="rounded-full shadow-[0_0_30px_#a855f7] transition-all duration-500 group-hover:shadow-[0_0_60px_#a855f7] relative">
-                                <div className="text-emerald-500 transition-colors duration-500 group-hover:text-purple-800">
-                                    <IconPlatypus className="w-32 h-32" />
-                                </div>
+                        
+                        <div className="relative group mx-auto w-max mb-6 cursor-default">
+                            {/* 1. GLOW & BLOCKER SILHOUETTE */}
+                            <div className="absolute inset-0 text-emerald-50 [&_*]:!fill-opacity-100 drop-shadow-[0_0_15px_#a855f7] transition-all duration-500 group-hover:drop-shadow-[0_0_45px_#a855f7]">
+                                <IconPlatypus className="w-32 h-32" />
+                            </div>
+
+                            {/* 2. CRISP FOREGROUND */}
+                            <div className="relative z-10 text-emerald-500 transition-colors duration-500 group-hover:text-purple-800">
+                                <IconPlatypus className="w-32 h-32" />
                             </div>
                         </div>
+
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
                             Platypus Gems
                         </h1>
