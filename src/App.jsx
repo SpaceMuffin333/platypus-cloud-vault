@@ -47,7 +47,7 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-// HARD LOCKED ORIGINAL LOGO. Flat colors only.
+// HARD LOCKED ORIGINAL LOGO. No effects.
 const IconPlatypus = ({ className = "w-8 h-8" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
@@ -59,7 +59,7 @@ const IconPlatypus = ({ className = "w-8 h-8" }) => (
 );
 const IconAsc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1 text-emerald-500 mb-0.5"><polyline points="18 15 12 9 6 15"></polyline></svg>;
 const IconDesc = () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1 text-emerald-500 mb-0.5"><polyline points="6 9 12 15 18 9"></polyline></svg>;
-const IconLabel = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" x2="7.01" y1="7"></line></svg>;
+const IconLabel = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg>;
 const IconTrash = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
 const IconEdit = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
 const IconCamera = ({ className = "w-5 h-5" }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>;
@@ -342,6 +342,7 @@ export default function App() {
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         }
+        setSearchTerm(''); 
         setSortConfig({ key, direction });
     };
 
@@ -405,16 +406,16 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        {/* THE LOCK SCREEN ELEGANCE FIX:
-                            - Outer div handles flat color transitions. Base text-emerald-500.
-                            - Hover transition snaps lines to text-purple-800.
-                            - Base Box-Shadow: A massive, radiating blur background depth. Zero shadow on the lines themselves (elegance).
-                            - Hover Box-Shadow: Increases base background depth by >200%. Stacks a second full-intensity hex (#a855f7) neon blur behind the container.
+                        {/* THE TRUE RADIANCE LOCK:
+                            - Outer div strictly controls color transitions. Base text-emerald-500.
+                            - Base Style: Zero effect on the div.
+                            - Hover Style (triggered by group): text-purple-800. Stacks multiple drop-shadows on the SVG geometry only.
+                            - Stack 1: A precise, tight neon purple (hex #a855f7) core radiating directly behind the outline.
+                            - Stack 2: A larger, softer neon purple background depth blur.
                         */}
                         <div className="group mx-auto w-max mb-6 cursor-default">
-                            <div className="text-emerald-500 shadow-[0_0_20px_#a855f7] rounded-full transition-all duration-500 group-hover:shadow-[0_0_60px_#a855f7] group-hover:text-purple-800 relative">
-                                <IconPlatypus className="w-32 h-32" />
-                                <div className="absolute inset-0 transition-all duration-500 shadow-[0_0_2px_#a855f7] rounded-full group-hover:shadow-[0_0_15px_#a855f7]"></div>
+                            <div className="text-emerald-500 transition-colors duration-500 group-hover:text-purple-800 relative">
+                                <IconPlatypus className="w-32 h-32 transition-all duration-500 group-hover:drop-shadow-[0_0_5px_#a855f7] group-hover:drop-shadow-[0_0_15px_#a855f7]" />
                             </div>
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
@@ -713,7 +714,7 @@ export default function App() {
                                             <input list="gem-treatments" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Select..." value={newGem.treatment} onChange={e => setNewGem({...newGem, treatment: e.target.value})} />
                                         </div>
                                         <div className="space-y-1">
-                                           <label className="text-[10px] font-bold text-slate-400 uppercase">Clarity</label>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Clarity</label>
                                             <input list="gem-clarity" className="w-full p-2 border border-slate-200 rounded-md outline-none focus:border-emerald-500 text-sm bg-transparent" placeholder="Select..." value={newGem.clarity} onChange={e => setNewGem({...newGem, clarity: e.target.value})} />
                                         </div>
                                         <div className="space-y-1">
