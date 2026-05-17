@@ -407,13 +407,28 @@ export default function App() {
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
                         
+                        {/* THE FIX: We inject a hard CSS override that turns the background duplicate 
+                            into a 100% solid brick that matches the background color (#ecfdf5). 
+                            This guarantees the drop-shadow ONLY originates from the outer bounds, 
+                            with absolutely zero leakage through the middle. */}
+                        <style>{`
+                            .silhouette-mask path, .silhouette-mask circle {
+                                fill: #ecfdf5 !important;
+                                fill-opacity: 1 !important;
+                                stroke: #ecfdf5 !important;
+                                stroke-opacity: 1 !important;
+                            }
+                        `}</style>
+                        
                         <div className="relative group mx-auto w-max mb-6 cursor-default">
-                            {/* 1. GLOW & BLOCKER SILHOUETTE */}
-                            <div className="absolute inset-0 text-emerald-50 [&_*]:!fill-opacity-100 drop-shadow-[0_0_15px_#a855f7] transition-all duration-500 group-hover:drop-shadow-[0_0_45px_#a855f7]">
-                                <IconPlatypus className="w-32 h-32" />
+                            {/* BLOCKER LAYER */}
+                            <div className="absolute inset-0 z-0 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)] transition-all duration-500 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,1)]">
+                                <div className="silhouette-mask">
+                                    <IconPlatypus className="w-32 h-32" />
+                                </div>
                             </div>
 
-                            {/* 2. CRISP FOREGROUND */}
+                            {/* FOREGROUND LAYER */}
                             <div className="relative z-10 text-emerald-500 transition-colors duration-500 group-hover:text-purple-800">
                                 <IconPlatypus className="w-32 h-32" />
                             </div>
