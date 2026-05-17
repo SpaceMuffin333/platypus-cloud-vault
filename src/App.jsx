@@ -47,7 +47,6 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-// PERFECTED PLATYPUS: Lock screen uses blockerColor, Nav screen relies on currentColor for the star color change
 const IconPlatypus = ({ className = "w-8 h-8", blockerColor = "transparent" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <g fill={blockerColor}>
@@ -101,6 +100,7 @@ export default function App() {
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [newGem, setNewGem] = useState(defaultGemState);
+    const [isMobileFormOpen, setIsMobileFormOpen] = useState(false); // Mobile toggle state
 
     const fileInputRef = useRef(null);
 
@@ -304,8 +304,10 @@ export default function App() {
             setInventory(inventory.map(item => item.id === editId ? gemData : item));
             setIsEditing(false); 
             setEditId(null);
+            setIsMobileFormOpen(false); // Close form on save
         } else {
             setInventory([gemData, ...inventory]);
+            setIsMobileFormOpen(false); // Close form on save
         }
         setNewGem(defaultGemState); 
         updateTimestamp();
@@ -315,6 +317,7 @@ export default function App() {
         setNewGem({ ...defaultGemState, ...gem });
         setEditId(gem.id); 
         setIsEditing(true);
+        setIsMobileFormOpen(true); // Automatically open the form on mobile if editing
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -322,6 +325,7 @@ export default function App() {
         setNewGem(defaultGemState); 
         setIsEditing(false); 
         setEditId(null); 
+        setIsMobileFormOpen(false);
     };
 
     const deleteGem = async (id) => {
@@ -405,15 +409,10 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        {/* THE ULTIMATE LOCK SCREEN PLATYPUS - UNTOUCHED EXACTLY AS YOU LIKED */}
-                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-800 cursor-default">
-                            <div className="drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] group-hover:drop-shadow-[0_0_50px_rgba(168,85,247,1)] transition-all duration-500">
-                                <div className="group-hover:drop-shadow-[0_0_20px_rgba(168,85,247,0.9)] transition-all duration-500">
-                                    <IconPlatypus className="w-32 h-32" blockerColor="#ecfdf5" />
-                                </div>
-                            </div>
+                        {/* UNTOUCHED PERFECT LOCK SCREEN LOGO */}
+                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-800 cursor-default drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] hover:drop-shadow-[0_0_50px_rgba(168,85,247,1)] transition-all duration-500">
+                            <IconPlatypus className="w-32 h-32" blockerColor="#ecfdf5" />
                         </div>
-
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
                             Platypus Gems
                         </h1>
@@ -564,7 +563,6 @@ export default function App() {
                                 {gemAssets.map(asset => (
                                     <div key={asset.id} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 hover:shadow-sm transition-all group">
                                         <div className="flex items-center gap-3 overflow-hidden">
-                                            {/* THUMBNAIL DETECTOR LOGIC */}
                                             {isImage(asset.file_name) ? (
                                                 <div className="w-10 h-10 rounded bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-200">
                                                     <img src={asset.file_url} alt="preview" className="w-full h-full object-cover" />
@@ -599,7 +597,7 @@ export default function App() {
     // --- RENDER MAIN INVENTORY ---
     const renderInventory = () => {
         return (
-            <div className="max-w-[90rem] mx-auto p-6 space-y-8 no-print">
+            <div className="max-w-[90rem] mx-auto p-4 md:p-6 space-y-6 md:space-y-8 no-print">
                 <div className="flex flex-col md:flex-row justify-between gap-4 items-end">
                     <div className="w-full md:w-1/3">
                         <label className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Search Vault</label>
@@ -610,15 +608,17 @@ export default function App() {
                             onChange={e => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <div className="flex flex-wrap gap-3 items-center justify-end mt-4 md:mt-0">
-                        <input type="file" accept=".csv" ref={fileInputRef} onChange={importCSV} className="hidden" />
-                        
-                        <button onClick={() => fileInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-indigo-700 bg-indigo-50 px-4 py-2 rounded-lg hover:bg-indigo-100 uppercase tracking-widest border border-indigo-200 transition-colors shadow-sm">
-                            <IconUpload /> Import CSV
-                        </button>
-                        <button onClick={exportCSV} className="flex items-center gap-2 text-[10px] font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 uppercase tracking-widest border border-blue-200 transition-colors shadow-sm">
-                            <IconFileText /> Export CSV
-                        </button>
+                    <div className="w-full md:w-auto flex flex-wrap gap-3 items-center justify-between md:justify-end mt-2 md:mt-0">
+                        <div className="flex gap-2">
+                            <input type="file" accept=".csv" ref={fileInputRef} onChange={importCSV} className="hidden" />
+                            
+                            <button onClick={() => fileInputRef.current.click()} className="flex items-center gap-2 text-[10px] font-bold text-indigo-700 bg-indigo-50 px-4 py-2 rounded-lg hover:bg-indigo-100 uppercase tracking-widest border border-indigo-200 transition-colors shadow-sm">
+                                <IconUpload /> Import CSV
+                            </button>
+                            <button onClick={exportCSV} className="flex items-center gap-2 text-[10px] font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 uppercase tracking-widest border border-blue-200 transition-colors shadow-sm">
+                                <IconFileText /> Export CSV
+                            </button>
+                        </div>
                         
                         <div className="text-right border-l border-slate-200 pl-4 ml-2">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Vault Value</p>
@@ -627,8 +627,19 @@ export default function App() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div className="lg:col-span-4 lg:col-span-3 xl:col-span-3">
+                {/* MOBILE REGISTRATION TOGGLE BUTTON */}
+                <div className="lg:hidden">
+                    <button 
+                        onClick={() => setIsMobileFormOpen(!isMobileFormOpen)}
+                        className="w-full py-4 bg-slate-900 hover:bg-purple-800 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all shadow-md flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(168,85,247,0.6)]"
+                    >
+                        {isMobileFormOpen ? 'Close Registration Form' : '+ Register New Gem'}
+                    </button>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+                    {/* REGISTRATION FORM (Hidden on mobile unless toggled open) */}
+                    <div className={`lg:col-span-4 xl:col-span-3 ${isMobileFormOpen || isEditing ? 'block' : 'hidden lg:block'}`}>
                         <div className={`p-5 rounded-2xl shadow-sm border transition-all sticky top-24 max-h-[85vh] overflow-y-auto ${isEditing ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-500' : 'bg-white border-slate-200'}`}>
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-lg font-bold flex items-center gap-2 text-slate-800">{isEditing ? 'Update Profile' : 'Gem Registration'}</h2>
@@ -777,8 +788,10 @@ export default function App() {
                     </div>
 
                     <div className="lg:col-span-8 lg:col-span-9 xl:col-span-9">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                            <table className="w-full text-left text-sm">
+                        {/* HORIZONTAL SCROLL CONTAINER IMPLEMENTED HERE (overflow-x-auto) */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
+                            {/* min-w-[900px] guarantees the table will never crush on mobile */}
+                            <table className="w-full text-left text-sm min-w-[900px]">
                                 <thead className="bg-slate-50 border-b text-slate-500 font-bold uppercase text-[10px] tracking-widest">
                                     <tr>
                                         <th className="p-4 w-16 sort-header rounded-tl-2xl" onClick={() => requestSort('sheetNum')} title="Sort by Reference Number">
@@ -892,10 +905,9 @@ export default function App() {
         <div className="min-h-screen bg-emerald-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
-                    {/* RESTORED "GOOD JOB" NAV CONTAINER */}
-                    {/* The square container produces the heavy UV drop shadow, the icon inside glows gently on its lines on hover */}
-                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-[0_0_15px_rgba(168,85,247,0.5)] border border-purple-500/30 transition-all duration-500 relative group-hover:text-purple-500 group-hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] group-hover:border-purple-500/60">
-                        <IconPlatypus className="w-10 h-10 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.9)]" />
+                    {/* RESTORED CONTAINER RADIATING NEON GLOW */}
+                    <div className="p-1.5 rounded-xl text-emerald-400 bg-emerald-500/10 border border-purple-500/40 drop-shadow-[0_0_10px_rgba(168,85,247,0.6)] hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.9)] transition-all duration-500 relative group-hover:text-purple-800 group-hover:border-purple-500/80">
+                        <IconPlatypus className="w-10 h-10" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-black text-2xl italic tracking-tighter uppercase leading-none">
