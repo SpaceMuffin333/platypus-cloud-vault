@@ -47,13 +47,9 @@ const GEM_DATA = {
 };
 
 // --- ICONS ---
-const IconPlatypus = ({ className = "w-8 h-8", blockerColor = "transparent" }) => (
+// HARD LOCKED: The original, pure logo code. No blockers, no hacks. 
+const IconPlatypus = ({ className = "w-8 h-8" }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g fill={blockerColor}>
-            <path d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" />
-            <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45Z" />
-            <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59Z" />
-        </g>
         <path className="logo-path" d="M20 50C20 35 35 25 55 25C75 25 85 35 85 50C85 65 75 75 55 75C35 75 20 65 20 50Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2.5" />
         <path d="M20 55C10 55 5 45 5 40C5 35 12 35 20 45" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M85 45C92 45 96 48 96 52C96 56 92 59 85 59" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
@@ -100,7 +96,7 @@ export default function App() {
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [newGem, setNewGem] = useState(defaultGemState);
-    const [isMobileFormOpen, setIsMobileFormOpen] = useState(false); // Mobile toggle state
+    const [isMobileFormOpen, setIsMobileFormOpen] = useState(false); 
 
     const fileInputRef = useRef(null);
 
@@ -304,10 +300,10 @@ export default function App() {
             setInventory(inventory.map(item => item.id === editId ? gemData : item));
             setIsEditing(false); 
             setEditId(null);
-            setIsMobileFormOpen(false); // Close form on save
+            setIsMobileFormOpen(false); 
         } else {
             setInventory([gemData, ...inventory]);
-            setIsMobileFormOpen(false); // Close form on save
+            setIsMobileFormOpen(false); 
         }
         setNewGem(defaultGemState); 
         updateTimestamp();
@@ -317,7 +313,7 @@ export default function App() {
         setNewGem({ ...defaultGemState, ...gem });
         setEditId(gem.id); 
         setIsEditing(true);
-        setIsMobileFormOpen(true); // Automatically open the form on mobile if editing
+        setIsMobileFormOpen(true); 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -409,9 +405,9 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
                 <div className="max-w-md w-full bg-emerald-50 rounded-2xl shadow-2xl overflow-hidden border border-emerald-100">
                     <div className="p-8 text-center bg-emerald-50 border-b border-emerald-200/50">
-                        {/* UNTOUCHED PERFECT LOCK SCREEN LOGO */}
-                        <div className="group mx-auto w-max mb-6 text-emerald-500 transition-colors duration-500 hover:text-purple-800 cursor-default drop-shadow-[0_0_15px_rgba(168,85,247,0.8)] hover:drop-shadow-[0_0_50px_rgba(168,85,247,1)] transition-all duration-500">
-                            <IconPlatypus className="w-32 h-32" blockerColor="#ecfdf5" />
+                        {/* HARD LOCKED: The exact layout and style you requested for the login screen. */}
+                        <div className="group mx-auto w-max mb-6 text-emerald-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-500 hover:text-purple-500 hover:drop-shadow-[0_0_40px_rgba(168,85,247,1)] cursor-default">
+                            <IconPlatypus className="w-32 h-32" />
                         </div>
                         <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-800">
                             Platypus Gems
@@ -788,9 +784,7 @@ export default function App() {
                     </div>
 
                     <div className="lg:col-span-8 lg:col-span-9 xl:col-span-9">
-                        {/* HORIZONTAL SCROLL CONTAINER IMPLEMENTED HERE (overflow-x-auto) */}
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
-                            {/* min-w-[900px] guarantees the table will never crush on mobile */}
                             <table className="w-full text-left text-sm min-w-[900px]">
                                 <thead className="bg-slate-50 border-b text-slate-500 font-bold uppercase text-[10px] tracking-widest">
                                     <tr>
@@ -905,9 +899,9 @@ export default function App() {
         <div className="min-h-screen bg-emerald-50 font-sans">
             <nav className="bg-slate-900 text-white p-4 px-8 flex justify-between items-center sticky top-0 z-50 no-print shadow-xl">
                 <div className="flex items-center gap-4 group cursor-default">
-                    {/* RESTORED CONTAINER RADIATING NEON GLOW */}
-                    <div className="p-1.5 rounded-xl text-emerald-400 bg-emerald-500/10 border border-purple-500/40 drop-shadow-[0_0_10px_rgba(168,85,247,0.6)] hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.9)] transition-all duration-500 relative group-hover:text-purple-800 group-hover:border-purple-500/80">
-                        <IconPlatypus className="w-10 h-10" />
+                    {/* HARD LOCKED: The exact 'good job' Nav Bar code block */}
+                    <div className="bg-emerald-500/10 p-1.5 rounded-xl text-emerald-400 shadow-[0_0_18px_rgba(168,85,247,0.55)] border border-purple-500/20 transition-all duration-500 relative group-hover:text-purple-500 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.7)] group-hover:border-purple-500/60">
+                        <IconPlatypus className="w-10 h-10 drop-shadow-[0_0_12px_rgba(168,85,247,0.6)] group-hover:drop-shadow-[0_0_12px_rgba(168,85,247,0.9)] transition-all duration-500" />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-black text-2xl italic tracking-tighter uppercase leading-none">
